@@ -20,6 +20,10 @@
         "patterns": ["packages/api-client/src/executionTypes.ts"]
       },
       {
+        "name": "error-reporting/public",
+        "patterns": ["packages/telemetry/src/reportError.ts"]
+      },
+      {
         "name": "image-compare/public",
         "patterns": [
           "src/extensions/core/imageCompare.ts",
@@ -2046,6 +2050,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2068,6 +2073,29 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
+          "image-compare/public",
+          "image-compositor/public",
+          "image-crop/public",
+          "ingest-api/public",
+          "keybindings/public",
+          "mask-editor/public",
+          "painter/public",
+          "remote-config/public",
+          "server-facts/public",
+          "webcam-capture/public",
+          "_inventory",
+          "_inventory/outer-1",
+          "_inventory/outer-2",
+          "unclassified"
+        ]
+      },
+      {
+        "from": "error-reporting/public",
+        "allow": [
+          "account/public",
+          "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2089,6 +2117,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2111,6 +2140,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2133,6 +2163,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2155,6 +2186,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2177,6 +2209,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2198,6 +2231,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2220,6 +2254,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2242,6 +2277,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2263,6 +2299,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2285,6 +2322,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2307,6 +2345,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2329,6 +2368,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2350,6 +2390,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2372,6 +2413,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2394,6 +2436,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2416,6 +2459,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2438,6 +2482,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2460,6 +2505,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2482,6 +2528,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2504,6 +2551,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2526,6 +2574,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2547,6 +2596,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
@@ -2568,6 +2618,7 @@
         "allow": [
           "account/public",
           "comfyui-api/public",
+          "error-reporting/public",
           "image-compare/public",
           "image-compositor/public",
           "image-crop/public",
