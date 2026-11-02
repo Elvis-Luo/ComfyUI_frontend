@@ -431,7 +431,7 @@ const browseOptions = computed<Array<SelectOption | SelectFolder>>(() => {
 
 const viewportStyle = computed<CSSProperties>(() => ({
   maxHeight: unifiedRows
-    ? 'min(30.5rem, max(2rem, calc(var(--reka-combobox-content-available-height) - 3rem)))'
+    ? 'min(30.5rem, max(2rem, calc(var(--reka-combobox-content-available-height, 100dvh) - 3rem)))'
     : '14rem',
   overflowY:
     browseOptions.value.length > MAX_VISIBLE_OPTIONS ? 'scroll' : 'auto',
@@ -556,8 +556,12 @@ function handleOpenChange(open: boolean) {
   isOpen.value = open
 
   if (open) {
-    directory.value = []
     refreshOptions()
+    const value = selectedOption.value?.value ?? ''
+    directory.value =
+      hasFolders.value && isFilePath(value)
+        ? value.split(/[/\\]/).slice(0, -1)
+        : []
   } else {
     searchQuery.value = ''
   }
