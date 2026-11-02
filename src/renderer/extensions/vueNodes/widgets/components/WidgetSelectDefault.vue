@@ -8,9 +8,10 @@
   >
     <template #between><slot name="between" /></template>
     <ComboboxRoot
+      ref="combobox"
       :open="isOpen"
       :model-value="selectedOption ?? null"
-      by="value"
+      by="key"
       :disabled
       ignore-filter
       selection-behavior="replace"
@@ -40,6 +41,7 @@
               type="button"
               role="combobox"
               aria-haspopup="listbox"
+              :aria-controls="listboxId"
               :aria-label="widgetLabel"
               :aria-invalid="isInvalid || undefined"
               :aria-expanded="isOpen"
@@ -101,9 +103,15 @@
         <ComboboxContent
           data-capture-wheel="true"
           data-testid="widget-select-default-overlay"
+          role="presentation"
+          :aria-orientation="undefined"
+          :aria-multiselectable="undefined"
           position="popper"
           :side-offset="1"
           :align="unifiedRows ? 'end' : 'start'"
+          :prioritize-position="unifiedRows"
+          sticky="always"
+          :collision-padding="8"
           :class="
             cn(
               'z-overlay overflow-hidden rounded-lg border border-solid border-border bg-background p-0 shadow-md',
@@ -128,15 +136,19 @@
               :placeholder="filterPlaceholder"
               auto-focus
               :aria-label="$t('g.search')"
+              :aria-controls="listboxId"
+              :aria-activedescendant="activeDescendant"
               data-testid="widget-select-default-search-input"
               class="w-full border-none bg-transparent text-xs outline-none"
             />
           </div>
 
           <div
+            :id="listboxId"
             data-testid="widget-select-default-viewport"
-            role="presentation"
-            class="max-h-56 min-w-full scrollbar-thin scrollbar-thumb-smoke-500/50 scrollbar-track-transparent scrollbar-gutter-stable overflow-y-auto p-1 text-xs"
+            role="listbox"
+            :aria-label="widgetLabel"
+            class="min-w-full scrollbar-thin scrollbar-thumb-smoke-500/50 scrollbar-track-transparent scrollbar-gutter-stable overflow-y-auto p-1 text-xs"
             :style="viewportStyle"
             @pointerdown.capture.self="handleViewportPointerDown"
           >
@@ -148,44 +160,25 @@
               <span class="size-3.5 shrink-0" />
             </div>
             <ComboboxVirtualizer
+              :key="`${directory.join('/')}:${searchQuery}`"
               v-slot="{ option }"
-              :options="filteredOptions"
+              :options="browseOptions"
               :estimate-size="32"
               :text-content="(option) => option.label"
             >
-              <ComboboxItem
-                :value="option"
-                :text-value="option.label"
-                :class="
-                  cn(
-                    'flex h-8 w-full cursor-pointer items-center justify-between gap-3 rounded-sm p-2 outline-none select-none',
-                    'hover:bg-secondary data-highlighted:bg-secondary',
-                    'data-[state=checked]:bg-primary/20 data-[state=checked]:hover:bg-primary/20 data-[state=checked]:data-highlighted:bg-primary/30'
-                  )
-                "
-              >
-                <span class="truncate">
-                  {{ option.label }}
-                </span>
-                <ComboboxItemIndicator
-                  class="flex shrink-0 items-center justify-center"
-                >
-                  <i
-                    class="icon-[lucide--check] size-3.5 text-foreground"
-                    aria-hidden="true"
-                  />
-                </ComboboxItemIndicator>
-              </ComboboxItem>
+              <WidgetSelectOption
+                :option
+                @select="handleOptionSelect($event, option)"
+              />
             </ComboboxVirtualizer>
-
-            <div
-              v-if="filteredOptions.length === 0"
-              role="status"
-              aria-live="polite"
-              class="p-2 text-xs text-muted-foreground"
-            >
-              {{ $t('g.noResultsFound') }}
-            </div>
+          </div>
+          <div
+            v-if="browseOptions.length === 0"
+            role="status"
+            aria-live="polite"
+            class="p-2 text-xs text-muted-foreground"
+          >
+            {{ $t('g.noResultsFound') }}
           </div>
         </ComboboxContent>
       </ComboboxPortal>
@@ -199,13 +192,11 @@ import {
   ComboboxAnchor,
   ComboboxContent,
   ComboboxInput,
-  ComboboxItem,
-  ComboboxItemIndicator,
   ComboboxRoot,
   ComboboxTrigger,
   ComboboxVirtualizer
 } from 'reka-ui'
-import { computed, inject, ref, useId } from 'vue'
+import { computed, inject, nextTick, ref, useId, useTemplateRef } from 'vue'
 import type { CSSProperties } from 'vue'
 
 import { useWorkflowStore } from '@/platform/workflow/management/stores/workflowStore'
@@ -217,6 +208,7 @@ import { cn } from '@comfyorg/tailwind-utils'
 
 import { WidgetInputBaseClass } from './layout'
 import WidgetLayoutField from './layout/WidgetLayoutField.vue'
+import WidgetSelectOption from './WidgetSelectOption.vue'
 
 interface Props {
   widget: SimplifiedWidget<string | undefined>
@@ -224,9 +216,18 @@ interface Props {
 }
 
 interface SelectOption {
+  kind: 'value'
+  key: string
   label: string
   rawValue: NonNullable<WidgetValue>
   value: string
+}
+
+interface SelectFolder {
+  kind: 'folder' | 'back'
+  key: string
+  label: string
+  directory: string[]
 }
 
 type SelectWidgetOptions = NonNullable<Props['widget']['options']> & {
@@ -237,8 +238,9 @@ const { widget, filenameSummary = false } = defineProps<Props>()
 const unifiedRows = inject(UnifiedWidgetRowsKey, false)
 const inputId = useId()
 const widgetLabel = computed(() => widget.label || widget.name)
+const listboxId = useId()
 
-const MAX_VISIBLE_OPTIONS = 7
+const MAX_VISIBLE_OPTIONS = 15
 const stepperButtons = [
   {
     direction: -1,
@@ -304,6 +306,8 @@ const modelValue = defineModel<WidgetValue>({
 })
 
 const searchQuery = ref('')
+const directory = ref<string[]>([])
+const combobox = useTemplateRef('combobox')
 const optionsRefreshKey = ref(0)
 const isOpen = ref(false)
 const searchInputContainerRef = ref<HTMLElement>()
@@ -347,6 +351,8 @@ const normalizedOptions = computed<SelectOption[]>(() => {
 
   return resolveValues(widgetOptions.value?.values).map(
     ({ rawValue, value }) => ({
+      kind: 'value',
+      key: `value:${value}`,
       label: getOptionLabel(value),
       rawValue,
       value
@@ -354,7 +360,20 @@ const normalizedOptions = computed<SelectOption[]>(() => {
   )
 })
 
-const isFilterable = computed(() => normalizedOptions.value.length > 4)
+const hasFolders = computed(
+  () =>
+    unifiedRows &&
+    !widgetOptions.value?.getOptionLabel &&
+    normalizedOptions.value.some((option) => isFilePath(option.value))
+)
+
+function isFilePath(value: string) {
+  return /[/\\][^/\\]+\.[a-z][a-z0-9]{0,15}$/i.test(value)
+}
+
+const isFilterable = computed(
+  () => hasFolders.value || normalizedOptions.value.length > 4
+)
 
 const filteredOptions = computed(() => {
   if (!isFilterable.value) return normalizedOptions.value
@@ -369,11 +388,61 @@ const filteredOptions = computed(() => {
   )
 })
 
+const browseOptions = computed<Array<SelectOption | SelectFolder>>(() => {
+  if (!hasFolders.value || searchQuery.value.trim())
+    return filteredOptions.value
+
+  const folders = new Map<string, SelectFolder>()
+  const files: SelectOption[] = []
+  for (const option of normalizedOptions.value) {
+    const parts = isFilePath(option.value)
+      ? option.value.split(/[/\\]/)
+      : [option.value]
+    if (!directory.value.every((part, index) => parts[index] === part)) continue
+    const label = parts[directory.value.length]
+    if (label === undefined) continue
+    if (parts.length === directory.value.length + 1) {
+      files.push({ ...option, label })
+    } else if (!folders.has(label)) {
+      const path = [...directory.value, label]
+      folders.set(label, {
+        kind: 'folder',
+        key: `folder:${path.join('/')}`,
+        label,
+        directory: path
+      })
+    }
+  }
+  return [
+    ...(directory.value.length
+      ? [
+          {
+            kind: 'back' as const,
+            key: 'back',
+            label: directory.value.join(' / '),
+            directory: directory.value.slice(0, -1)
+          }
+        ]
+      : []),
+    ...folders.values(),
+    ...files
+  ]
+})
+
 const viewportStyle = computed<CSSProperties>(() => ({
+  maxHeight: unifiedRows
+    ? 'min(30.5rem, max(2rem, calc(var(--reka-combobox-content-available-height) - 3rem)))'
+    : '14rem',
   overflowY:
-    filteredOptions.value.length > MAX_VISIBLE_OPTIONS ? 'scroll' : 'auto',
+    browseOptions.value.length > MAX_VISIBLE_OPTIONS ? 'scroll' : 'auto',
   scrollbarGutter: 'stable'
 }))
+
+const activeDescendant = computed((): string | undefined =>
+  browseOptions.value.length
+    ? combobox.value?.highlightedElement?.id
+    : undefined
+)
 
 const normalizedModelValue = computed(() =>
   modelValue.value == null ? undefined : String(modelValue.value)
@@ -412,8 +481,20 @@ const selectedSummary = computed(() =>
     : selectedLabel.value
 )
 
-function selectOption(option: SelectOption | null) {
-  if (!option) return
+async function handleOptionSelect(
+  event: Event,
+  option: SelectOption | SelectFolder
+) {
+  if (option.kind === 'value') return
+  event.preventDefault()
+  directory.value = option.directory
+  await nextTick()
+  focusSearchInput()
+  combobox.value?.highlightFirstItem?.()
+}
+
+function selectOption(option: SelectOption | SelectFolder | null) {
+  if (!option || option.kind !== 'value') return
 
   modelValue.value = option.rawValue
   useWorkflowStore().activeWorkflow?.changeTracker.captureCanvasState()
@@ -475,6 +556,7 @@ function handleOpenChange(open: boolean) {
   isOpen.value = open
 
   if (open) {
+    directory.value = []
     refreshOptions()
   } else {
     searchQuery.value = ''
