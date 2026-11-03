@@ -161,6 +161,16 @@ describe('Promoting a dynamic combo onto a subgraph node', () => {
     expect(widget(host, 'mode.factor').value).toBe(7)
   })
 
+  test('rejects a link to the promoted combo input from a node output', () => {
+    const { graph, host } = buildPromoted()
+    const source = LiteGraph.createNode(SOURCE_NODE_TYPE)
+    assert(source)
+    graph.add(source)
+
+    expect(source.connect(0, host, 0)).toBeNull()
+    expect(host.isInputConnected(0)).toBe(false)
+  })
+
   test('switching the subgraph node option swaps its child inputs', () => {
     const { inner, host } = buildPromoted()
     widget(host, 'mode').value = 'caption'
