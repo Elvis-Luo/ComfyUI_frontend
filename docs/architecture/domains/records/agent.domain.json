@@ -458,6 +458,7 @@
     "extension-runtime",
     "keybindings",
     "workbench-shell",
+    "remote-config",
     "workflow-management"
   ],
   "allowedConsumers": [],

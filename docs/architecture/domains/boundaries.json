@@ -4330,6 +4330,7 @@
           "error-reporting/domain",
           "extension-runtime/domain",
           "keybindings/domain",
+          "remote-config/domain",
           "workbench-shell/domain",
           "workflow-management/domain",
           "app-host/domain/outer-1",
@@ -4342,6 +4343,7 @@
         "from": "agent/application",
         "allow": [
           "keybindings/application/public",
+          "remote-config/infrastructure/public",
           "agent/domain",
           "agent/application",
           "agent/infrastructure",
@@ -4364,6 +4366,9 @@
           "extension-runtime/infrastructure",
           "keybindings/domain",
           "keybindings/application",
+          "remote-config/domain",
+          "remote-config/application",
+          "remote-config/infrastructure",
           "workbench-shell/domain",
           "workbench-shell/application",
           "workbench-shell/infrastructure",
@@ -4377,6 +4382,7 @@
           "extension-runtime/infrastructure/outer-1",
           "keybindings/domain/outer-1",
           "keybindings/application/outer-1",
+          "remote-config/application/outer-1",
           "unclassified"
         ]
       },
@@ -4384,6 +4390,7 @@
         "from": "agent/infrastructure",
         "allow": [
           "keybindings/application/public",
+          "remote-config/infrastructure/public",
           "agent/domain",
           "agent/application",
           "agent/infrastructure",
@@ -4406,6 +4413,9 @@
           "extension-runtime/infrastructure",
           "keybindings/domain",
           "keybindings/application",
+          "remote-config/domain",
+          "remote-config/application",
+          "remote-config/infrastructure",
           "workbench-shell/domain",
           "workbench-shell/application",
           "workbench-shell/infrastructure",
@@ -4419,6 +4429,7 @@
           "extension-runtime/infrastructure/outer-1",
           "keybindings/domain/outer-1",
           "keybindings/application/outer-1",
+          "remote-config/application/outer-1",
           "unclassified"
         ]
       },
@@ -4448,6 +4459,8 @@
           "keybindings/domain",
           "keybindings/application",
           "keybindings/presentation",
+          "remote-config/domain",
+          "remote-config/application",
           "workbench-shell/domain",
           "workbench-shell/application",
           "workbench-shell/presentation",
@@ -4464,6 +4477,7 @@
           "extension-runtime/presentation/outer-1",
           "keybindings/domain/outer-1",
           "keybindings/application/outer-1",
+          "remote-config/application/outer-1",
           "workflow-management/presentation/outer-1",
           "workbench-shell/presentation/outer-2",
           "unclassified"
@@ -4474,6 +4488,7 @@
         "allow": [
           "keybindings/application/public",
           "keybindings/integration/public",
+          "remote-config/infrastructure/public",
           "agent/domain",
           "agent/application",
           "agent/infrastructure",
@@ -4508,6 +4523,9 @@
           "keybindings/application",
           "keybindings/presentation",
           "keybindings/integration",
+          "remote-config/domain",
+          "remote-config/application",
+          "remote-config/infrastructure",
           "workbench-shell/domain",
           "workbench-shell/application",
           "workbench-shell/infrastructure",
@@ -4531,6 +4549,7 @@
           "extension-runtime/presentation/outer-1",
           "keybindings/domain/outer-1",
           "keybindings/application/outer-1",
+          "remote-config/application/outer-1",
           "workflow-management/presentation/outer-1",
           "workbench-shell/presentation/outer-2",
           "unclassified"
@@ -8457,6 +8476,7 @@
         "allow": [
           "keybindings/application/public",
           "keybindings/integration/public",
+          "remote-config/infrastructure/public",
           "agent/domain",
           "agent/application",
           "agent/infrastructure",
@@ -8491,6 +8511,9 @@
           "keybindings/application",
           "keybindings/presentation",
           "keybindings/integration",
+          "remote-config/domain",
+          "remote-config/application",
+          "remote-config/infrastructure",
           "workbench-shell/domain",
           "workbench-shell/application",
           "workbench-shell/infrastructure",
@@ -8514,6 +8537,7 @@
           "extension-runtime/presentation/outer-1",
           "keybindings/domain/outer-1",
           "keybindings/application/outer-1",
+          "remote-config/application/outer-1",
           "workflow-management/presentation/outer-1",
           "workbench-shell/presentation/outer-2",
           "unclassified"
