@@ -72,6 +72,11 @@ export interface SimplifiedWidget<
 
   controlWidget?: SafeControlWidget
 
+  folderLock?: {
+    directory: string[] | undefined
+    update: (directory: string[] | undefined) => void
+  }
+
   displayLabel?: string
 
   /** Localized display label (falls back to name if not provided) */

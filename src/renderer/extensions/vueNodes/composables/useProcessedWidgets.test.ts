@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, assert, beforeEach, describe, expect, it, vi } from 'vitest'
 import { computed } from 'vue'
 
 import { LGraph, LGraphNode } from '@/lib/litegraph/src/litegraph'
@@ -557,6 +557,37 @@ describe('computeProcessedWidgets', () => {
     const result = processWidgets({ widgetIds: [id], showAdvanced: true })
 
     expect(result[0].simplified.borderStyle).toBe('ring ring-primary')
+  })
+
+  it('serializes folder locks per input without changing widget values or sibling metadata', () => {
+    const id = widgetId(GRAPH_ID, toNodeId(1), 'model')
+    registerWidgetState(id, { type: 'combo', value: 'Other/model.safetensors' })
+    const { graph, node } = createGraphWithNode([
+      createMockWidget({
+        widgetId: id,
+        name: 'model',
+        value: 'Other/model.safetensors'
+      })
+    ])
+    node.serialize_widgets = true
+    node.properties.widget_folder_locks = { sibling: ['SDXL'] }
+    const [processed] = processWidgets({ widgetIds: [id], rootGraph: graph })
+    const lock = processed.simplified.folderLock
+    assert.exists(lock)
+
+    lock.update(['MOSS', 'image'])
+    expect(node.serialize()).toMatchObject({
+      properties: {
+        widget_folder_locks: { model: ['MOSS', 'image'], sibling: ['SDXL'] }
+      },
+      widgets_values: ['Other/model.safetensors']
+    })
+    expect(lock.directory).toEqual(['MOSS', 'image'])
+    lock.update(undefined)
+    expect(node.serialize().properties?.widget_folder_locks).toEqual({
+      sibling: ['SDXL']
+    })
+    expect(lock.directory).toBeUndefined()
   })
 
   it('reads widget identity, value, label, and options from widgetId state', () => {

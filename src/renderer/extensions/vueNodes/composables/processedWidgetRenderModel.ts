@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 import { showNodeOptions } from '@/composables/graph/useMoreOptionsMenu'
 import { resolvePromotedWidgetSource } from '@/core/graph/subgraph/resolvePromotedWidgetSource'
 import type { INodeInputSlot } from '@comfyorg/graph-model/slots'
@@ -207,6 +209,37 @@ function hasWidgetError(
   )
 }
 
+const folderLocksSchema = z.record(
+  z.string(),
+  z.array(z.string().min(1)).min(1)
+)
+
+function createFolderLock(
+  node: LGraphNode,
+  widgetName: string
+): NonNullable<SimplifiedWidget['folderLock']> {
+  function readLocks() {
+    const parsed = folderLocksSchema.safeParse(
+      node.properties.widget_folder_locks
+    )
+    return parsed.success ? parsed.data : {}
+  }
+
+  return {
+    get directory() {
+      const locks = readLocks()
+      return Object.hasOwn(locks, widgetName) ? locks[widgetName] : undefined
+    },
+    update(directory) {
+      const locks = readLocks()
+      if (directory) locks[widgetName] = directory
+      else delete locks[widgetName]
+      if (Object.keys(locks).length) node.properties.widget_folder_locks = locks
+      else delete node.properties.widget_folder_locks
+    }
+  }
+}
+
 function createWidgetUpdateHandler({
   id,
   live,
@@ -410,6 +443,10 @@ function processWidget(
     borderStyle: advanced ? 'ring ring-primary' : undefined,
     callback: updateHandler,
     controlWidget,
+    folderLock:
+      type === 'combo' && live
+        ? createFolderLock(live.node, live.widget.name)
+        : undefined,
     label: widgetState.label,
     linkedUpstream,
     nodeLocatorId: widgetNodeLocatorId(ctx, bareWidgetId, sourceExecutionId),

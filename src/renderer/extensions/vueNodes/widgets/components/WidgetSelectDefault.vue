@@ -43,6 +43,7 @@
               aria-haspopup="listbox"
               :aria-controls="listboxId"
               :aria-label="widgetLabel"
+              :aria-description="lockedDescription"
               :aria-invalid="isInvalid || undefined"
               :aria-expanded="isOpen"
               :disabled
@@ -51,15 +52,16 @@
               class="flex h-full min-w-0 flex-1 cursor-pointer items-center overflow-hidden border-none bg-transparent p-0 outline-none not-disabled:hover:bg-muted disabled:cursor-default"
             >
               <span
-                :class="
-                  cn(
-                    'min-w-[4ch] flex-1 truncate px-2',
-                    unifiedRows ? 'text-right' : 'text-left'
-                  )
-                "
+                :data-unified="unifiedRows"
+                class="min-w-[4ch] flex-1 truncate px-2 text-left data-[unified=true]:text-right"
               >
-                {{ selectedSummary || placeholder || '\u00a0' }}
+                {{ displayValue }}
               </span>
+              <i
+                v-if="lockedDirectory"
+                class="mr-1 icon-[lucide--lock] text-muted-foreground"
+                aria-hidden="true"
+              />
             </button>
           </ComboboxTrigger>
           <slot />
@@ -122,6 +124,30 @@
           @keydown.escape.stop="handleOpenChange(false)"
           @focus-outside="handleFocusOutside"
         >
+          <div
+            v-if="showFolderHeader"
+            class="flex min-w-0 items-center gap-2 border-b border-border px-2 py-1 text-xs"
+          >
+            <span
+              class="min-w-0 flex-1 truncate text-muted-foreground"
+              :title="folderPath"
+              >{{ folderPath }}</span
+            >
+            <Button
+              type="button"
+              variant="muted-textonly"
+              :disabled="!canLockDirectory"
+              :aria-label="lockLabel"
+              :aria-pressed="Boolean(lockedDirectory)"
+              :tooltip="lockLabel"
+              class="size-8 shrink-0 p-0 aria-pressed:bg-secondary aria-pressed:text-foreground"
+              @keydown.stop
+              @keydown.escape="handleOpenChange(false)"
+              @click="toggleFolderLock"
+            >
+              <i :class="lockIcon" aria-hidden="true" />
+            </Button>
+          </div>
           <div
             v-if="isFilterable"
             ref="searchInputContainerRef"
@@ -199,8 +225,10 @@ import {
 } from 'reka-ui'
 import { computed, inject, nextTick, ref, useId, useTemplateRef } from 'vue'
 import type { CSSProperties } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { useWorkflowStore } from '@/platform/workflow/management/stores/workflowStore'
+import Button from '@comfyorg/design-system/button/Button'
 import { useRestoreFocusOnViewportPointer } from '@/renderer/extensions/vueNodes/widgets/composables/useRestoreFocusOnViewportPointer'
 import type { SimplifiedWidget, WidgetValue } from '@/types/simplifiedWidget'
 import { UnifiedWidgetRowsKey } from '@/types/widgetRowLayout'
@@ -236,6 +264,7 @@ type SelectWidgetOptions = NonNullable<Props['widget']['options']> & {
 }
 
 const { widget, filenameSummary = false } = defineProps<Props>()
+const { t } = useI18n()
 const unifiedRows = inject(UnifiedWidgetRowsKey, false)
 const inputId = useId()
 const widgetLabel = computed(() => widget.label || widget.name)
@@ -308,6 +337,10 @@ const modelValue = defineModel<WidgetValue>({
 
 const searchQuery = ref('')
 const directory = ref<string[]>([])
+const localFolderLock = ref<string[]>()
+const lockedDirectory = computed(() =>
+  widget.folderLock ? widget.folderLock.directory : localFolderLock.value
+)
 const combobox = useTemplateRef('combobox')
 const optionsRefreshKey = ref(0)
 const isOpen = ref(false)
@@ -373,16 +406,88 @@ function isFilePath(value: string) {
 }
 
 const isFilterable = computed(
-  () => hasFolders.value || normalizedOptions.value.length > 4
+  () =>
+    hasFolders.value ||
+    Boolean(lockedDirectory.value) ||
+    normalizedOptions.value.length > 4
 )
 
+function isInDirectory(value: string, path: string[]) {
+  if (!isFilePath(value)) return false
+  const parts = value.split(/[/\\]/).filter(Boolean).slice(0, -1)
+  return path.every((part, index) => parts[index] === part)
+}
+
+const scopedOptions = computed(() => {
+  const path = lockedDirectory.value
+  return path
+    ? normalizedOptions.value.filter((option) =>
+        isInDirectory(option.value, path)
+      )
+    : normalizedOptions.value
+})
+
+const folderPath = computed(
+  () =>
+    (lockedDirectory.value ?? directory.value).join(' / ') ||
+    t('widgets.allFolders')
+)
+const lockIcon = computed(() =>
+  lockedDirectory.value ? 'icon-[lucide--lock]' : 'icon-[lucide--lock-open]'
+)
+const showFolderHeader = computed(
+  () => hasFolders.value || Boolean(lockedDirectory.value)
+)
+const canLockDirectory = computed(
+  () => Boolean(lockedDirectory.value) || directory.value.length > 0
+)
+const lockedDescription = computed(() =>
+  lockedDirectory.value
+    ? t(
+        'widgets.folderLocked',
+        { name: lockedDirectory.value.join(' / ') },
+        { escapeParameter: false }
+      )
+    : undefined
+)
+const displayValue = computed(
+  () => selectedSummary.value || placeholder.value || '\u00a0'
+)
+const lockLabel = computed(() =>
+  lockedDirectory.value
+    ? t(
+        'widgets.unlockFolder',
+        { name: folderPath.value },
+        { escapeParameter: false }
+      )
+    : directory.value.length
+      ? t(
+          'widgets.lockFolder',
+          { name: folderPath.value },
+          { escapeParameter: false }
+        )
+      : t('widgets.browseToLockFolder')
+)
+
+async function toggleFolderLock() {
+  const path = lockedDirectory.value ? undefined : [...directory.value]
+  if (widget.folderLock) {
+    widget.folderLock.update(path)
+    useWorkflowStore().activeWorkflow?.changeTracker.captureCanvasState()
+  } else {
+    localFolderLock.value = path
+  }
+  await nextTick()
+  focusSearchInput()
+}
+
 const filteredOptions = computed(() => {
-  if (!isFilterable.value) return normalizedOptions.value
+  if (!isFilterable.value) return scopedOptions.value
 
   const query = searchQuery.value.trim().toLocaleLowerCase()
-  if (!query) return normalizedOptions.value
+  if (!query) return scopedOptions.value
 
-  return normalizedOptions.value.filter(
+  return scopedOptions.value.filter(
     (option) =>
       option.value.toLocaleLowerCase().includes(query) ||
       option.label.toLocaleLowerCase().includes(query)
@@ -395,7 +500,7 @@ const browseOptions = computed<Array<SelectOption | SelectFolder>>(() => {
 
   const folders = new Map<string, SelectFolder>()
   const files: SelectOption[] = []
-  for (const option of normalizedOptions.value) {
+  for (const option of scopedOptions.value) {
     const parts = isFilePath(option.value)
       ? option.value.split(/[/\\]/).filter(Boolean)
       : [option.value]
@@ -416,7 +521,7 @@ const browseOptions = computed<Array<SelectOption | SelectFolder>>(() => {
   }
   const labelCounts = countBy(files, (option) => option.label)
   return [
-    ...(directory.value.length
+    ...(directory.value.length > (lockedDirectory.value?.length ?? 0)
       ? [
           {
             kind: 'back' as const,
@@ -437,7 +542,7 @@ const browseOptions = computed<Array<SelectOption | SelectFolder>>(() => {
 
 const viewportStyle = computed<CSSProperties>(() => ({
   maxHeight: unifiedRows
-    ? 'min(30.5rem, max(2rem, calc(var(--reka-combobox-content-available-height, 100dvh) - 3rem)))'
+    ? `min(30.5rem, max(2rem, calc(var(--reka-combobox-content-available-height, 100dvh) - ${showFolderHeader.value ? '5.5rem' : '3rem'})))`
     : '14rem',
   overflowY:
     browseOptions.value.length > MAX_VISIBLE_OPTIONS ? 'scroll' : 'auto',
@@ -509,12 +614,13 @@ function selectOption(option: SelectOption | SelectFolder | null) {
 }
 
 function adjacentOption(direction: -1 | 1) {
-  const options = normalizedOptions.value
-  const index = selectedOption.value
-    ? options.indexOf(selectedOption.value)
-    : direction === 1
-      ? -1
-      : options.length
+  const options = scopedOptions.value
+  const index =
+    selectedOption.value && options.includes(selectedOption.value)
+      ? options.indexOf(selectedOption.value)
+      : direction === 1
+        ? -1
+        : options.length
   return options[index + direction]
 }
 
@@ -548,7 +654,12 @@ const NAVIGATION_KEYS = new Set([
 ])
 
 function replayNavigationAfterPendingHighlight(event: KeyboardEvent) {
-  if (!event.isTrusted || event.isComposing || !NAVIGATION_KEYS.has(event.key))
+  if (
+    event.target instanceof HTMLButtonElement ||
+    !event.isTrusted ||
+    event.isComposing ||
+    !NAVIGATION_KEYS.has(event.key)
+  )
     return
   const { target } = event
   event.preventDefault()
@@ -565,9 +676,11 @@ function handleOpenChange(open: boolean) {
     refreshOptions()
     const value = selectedOption.value?.value ?? ''
     directory.value =
-      hasFolders.value && isFilePath(value)
-        ? value.split(/[/\\]/).filter(Boolean).slice(0, -1)
-        : []
+      lockedDirectory.value && !isInDirectory(value, lockedDirectory.value)
+        ? [...lockedDirectory.value]
+        : hasFolders.value && isFilePath(value)
+          ? value.split(/[/\\]/).filter(Boolean).slice(0, -1)
+          : []
   } else {
     searchQuery.value = ''
   }
