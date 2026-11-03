@@ -91,6 +91,7 @@
   "publicEntryPoints": [],
   "allowedDependencies": ["ingest-api", "node-replacement", "remote-config"],
   "allowedConsumers": [
+    "agent",
     "app-host",
     "authentication",
     "billing",
