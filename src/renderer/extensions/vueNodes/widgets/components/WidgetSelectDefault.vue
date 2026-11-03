@@ -228,9 +228,11 @@ import type { CSSProperties } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useWorkflowStore } from '@/platform/workflow/management/stores/workflowStore'
+import { useWidgetValueStore } from '@/stores/widgetValueStore'
 import Button from '@comfyorg/design-system/button/Button'
 import { useRestoreFocusOnViewportPointer } from '@/renderer/extensions/vueNodes/widgets/composables/useRestoreFocusOnViewportPointer'
 import type { SimplifiedWidget, WidgetValue } from '@/types/simplifiedWidget'
+import { WidgetIdentityKey } from '@/types/widgetContext'
 import { UnifiedWidgetRowsKey } from '@/types/widgetRowLayout'
 import { useWidgetHeight } from '@/types/widgetTypes'
 import { cn } from '@comfyorg/tailwind-utils'
@@ -338,8 +340,12 @@ const modelValue = defineModel<WidgetValue>({
 const searchQuery = ref('')
 const directory = ref<string[]>([])
 const localFolderLock = ref<string[]>()
+const widgetIdentity = inject(WidgetIdentityKey, undefined)
+const widgetValueStore = useWidgetValueStore()
 const lockedDirectory = computed(() =>
-  widget.folderLock ? widget.folderLock.directory : localFolderLock.value
+  widgetIdentity?.value
+    ? widgetValueStore.getWidgetFolderLock(widgetIdentity.value)?.directory
+    : localFolderLock.value
 )
 const combobox = useTemplateRef('combobox')
 const optionsRefreshKey = ref(0)
@@ -471,8 +477,11 @@ const lockLabel = computed(() =>
 
 async function toggleFolderLock() {
   const path = lockedDirectory.value ? undefined : [...directory.value]
-  if (widget.folderLock) {
-    widget.folderLock.update(path)
+  if (widgetIdentity?.value) {
+    widgetValueStore.setWidgetFolderLock(
+      widgetIdentity.value,
+      path ? { directory: path } : undefined
+    )
     useWorkflowStore().activeWorkflow?.changeTracker.captureCanvasState()
   } else {
     localFolderLock.value = path

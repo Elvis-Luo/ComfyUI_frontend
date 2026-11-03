@@ -1,11 +1,14 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, nextTick } from 'vue'
+import { computed, defineComponent, nextTick } from 'vue'
 import { createI18n } from 'vue-i18n'
 
 import type { SimplifiedWidget, WidgetValue } from '@/types/simplifiedWidget'
+import { WidgetIdentityKey } from '@/types/widgetContext'
 import { UnifiedWidgetRowsKey } from '@/types/widgetRowLayout'
+import { toNodeId } from '@comfyorg/graph-model/nodeId'
+import { widgetId } from '@comfyorg/graph-model/widgetId'
 
 import WidgetSelectDefault from './WidgetSelectDefault.vue'
 
@@ -78,7 +81,12 @@ describe('WidgetSelectDefault', () => {
       slots,
       global: {
         plugins: [i18n],
-        provide: { [UnifiedWidgetRowsKey]: unifiedRows },
+        provide: {
+          [UnifiedWidgetRowsKey]: unifiedRows,
+          [WidgetIdentityKey]: computed(() =>
+            widgetId('test-graph', toNodeId(1), widget.name)
+          )
+        },
         stubs: {
           WidgetLayoutField: WidgetLayoutFieldStub
         }

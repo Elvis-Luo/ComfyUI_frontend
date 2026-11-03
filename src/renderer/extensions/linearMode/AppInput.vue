@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { remove } from 'es-toolkit'
-import { computed, inject } from 'vue'
+import { computed, inject, provide } from 'vue'
 
 import type { LinearInput } from '@/platform/workflow/management/stores/comfyWorkflow'
 import { useAppModeStore } from '@/stores/appModeStore'
+import { WidgetIdentityKey } from '@/types/widgetContext'
 import { UnifiedWidgetRowsKey } from '@/types/widgetRowLayout'
 import type { WidgetId } from '@comfyorg/graph-model/widgetId'
 import { cn } from '@comfyorg/tailwind-utils'
@@ -13,6 +14,11 @@ const { widgetId, name } = defineProps<{
   enable: boolean
   name: string
 }>()
+
+provide(
+  WidgetIdentityKey,
+  computed(() => widgetId)
+)
 
 const appModeStore = useAppModeStore()
 const unifiedRows = inject(UnifiedWidgetRowsKey, false)

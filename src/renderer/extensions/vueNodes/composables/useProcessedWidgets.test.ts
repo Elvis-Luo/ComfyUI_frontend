@@ -1,4 +1,4 @@
-import { afterEach, assert, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { computed } from 'vue'
 
 import { LGraph, LGraphNode } from '@/lib/litegraph/src/litegraph'
@@ -562,7 +562,7 @@ describe('computeProcessedWidgets', () => {
   it('serializes folder locks per input without changing widget values or sibling metadata', () => {
     const id = widgetId(GRAPH_ID, toNodeId(1), 'model')
     registerWidgetState(id, { type: 'combo', value: 'Other/model.safetensors' })
-    const { graph, node } = createGraphWithNode([
+    const { node } = createGraphWithNode([
       createMockWidget({
         widgetId: id,
         name: 'model',
@@ -570,24 +570,61 @@ describe('computeProcessedWidgets', () => {
       })
     ])
     node.serialize_widgets = true
-    node.properties.widget_folder_locks = { sibling: ['SDXL'] }
-    const [processed] = processWidgets({ widgetIds: [id], rootGraph: graph })
-    const lock = processed.simplified.folderLock
-    assert.exists(lock)
+    const store = useWidgetValueStore()
+    const sibling = widgetId(GRAPH_ID, node.id, 'sibling')
+    store.setWidgetFolderLock(sibling, { directory: ['SDXL'] })
 
-    lock.update(['MOSS', 'image'])
-    expect(node.serialize()).toMatchObject({
+    store.setWidgetFolderLock(id, { directory: ['MOSS', 'image'] })
+    const saved = node.serialize()
+    expect(saved).toMatchObject({
       properties: {
         widget_folder_locks: { model: ['MOSS', 'image'], sibling: ['SDXL'] }
       },
       widgets_values: ['Other/model.safetensors']
     })
-    expect(lock.directory).toEqual(['MOSS', 'image'])
-    lock.update(undefined)
+    store.clearNode(GRAPH_ID, node.id)
+    node.configure(saved)
+    expect(store.getWidgetFolderLock(id)?.directory).toEqual(['MOSS', 'image'])
+    expect(node.properties).not.toHaveProperty('widget_folder_locks')
+    store.setWidgetFolderLock(id, undefined)
     expect(node.serialize().properties?.widget_folder_locks).toEqual({
       sibling: ['SDXL']
     })
-    expect(lock.directory).toBeUndefined()
+    expect(store.getWidgetFolderLock(id)).toBeUndefined()
+  })
+
+  it('restores a detached copy under its new node identity without sharing the lock', () => {
+    const { graph, node } = createGraphWithNode([])
+    const store = useWidgetValueStore()
+    const originalId = widgetId(GRAPH_ID, node.id, 'model')
+    store.setWidgetFolderLock(originalId, { directory: ['MOSS', 'image'] })
+    const saved = node.serialize()
+    const copy = createNode([])
+
+    copy.configure(saved)
+    expect(copy.serialize().properties?.widget_folder_locks).toEqual({
+      model: ['MOSS', 'image']
+    })
+    graph.add(copy)
+    const copyId = widgetId(GRAPH_ID, copy.id, 'model')
+
+    expect(copyId).not.toBe(originalId)
+    expect(store.getWidgetFolderLock(copyId)).toEqual({
+      directory: ['MOSS', 'image']
+    })
+    expect(copy.properties).not.toHaveProperty('widget_folder_locks')
+    graph.remove(copy)
+    expect(copy.serialize().properties?.widget_folder_locks).toEqual({
+      model: ['MOSS', 'image']
+    })
+    graph.add(copy)
+    store.setWidgetFolderLock(copyId, undefined)
+    expect(copy.serialize().properties).not.toHaveProperty(
+      'widget_folder_locks'
+    )
+    expect(store.getWidgetFolderLock(originalId)).toEqual({
+      directory: ['MOSS', 'image']
+    })
   })
 
   it('reads widget identity, value, label, and options from widgetId state', () => {
