@@ -1164,7 +1164,7 @@ export const zResubscribeRequest = z.object({
 })
 
 /**
- * The newest open renewal invoice of the workspace's Stripe subscription (active, or canceled but not yet ended). Returned only to workspace owners on the stripe billing rail while billing_status is payment_failed or paused, or on the legacy_stripe billing rail while billing_status is payment_failed and its legacy subscription is past_due or unpaid, and not while a payment for it is processing. hosted_invoice_url is a bearer payment link.
+ * The newest open renewal invoice of the workspace's Stripe subscription (active, or canceled but not yet ended). Returned only to workspace owners on the stripe billing rail while billing_status is payment_failed or paused, and not while a payment for it is processing. hosted_invoice_url is a bearer payment link.
  */
 export const zRenewalInvoice = z.object({
   amount_due: z.coerce
@@ -1196,6 +1196,13 @@ export const zReleaseUnsupportedPack = z.object({
 export const zReleaseUnsupportedPacks = z.object({
   packs: z.array(zReleaseUnsupportedPack),
   release_id: z.string().nullable()
+})
+
+/**
+ * A 429 body with a fixed message and no machine-readable code.
+ */
+export const zRateLimitExceededError = z.object({
+  error: z.string()
 })
 
 /**
@@ -1828,6 +1835,27 @@ export const zOAuthProtectedResourceMetadata = z.object({
 })
 
 /**
+ * The platform this authorization code will be delivered to, when the
+ * request's validated redirect_uri is one of a known platform's own OAuth
+ * callbacks (ChatGPT, Claude). Derived server-side ONLY from the
+ * redirect_uri this request was byte-matched against at GET time —
+ * never from the registrant-supplied client_name — against a
+ * version-controlled registry of exact callbacks and anchored callback
+ * patterns (no host-only or prefix matching). Present only on `dynamic`
+ * clients; omitted for first-party clients and for any redirect that is
+ * not a registered platform callback. It verifies the destination
+ * platform, NOT that the registrant is that platform's own app (any
+ * connector on the platform can hold such a callback), so consumers
+ * should label it by `display_name` and still show the redirect host.
+ * `client_display_name` is unchanged and remains registrant-supplied.
+ *
+ */
+export const zOAuthConsentVerifiedClient = z.object({
+  display_name: z.string(),
+  platform: z.enum(['chatgpt', 'claude'])
+})
+
+/**
  * One workspace option presented in the OAuth consent challenge. Promoted to a named schema so the generated Go type is referenceable in handlers and tests rather than re-declared as an anonymous struct at every callsite.
  *
  */
@@ -1850,6 +1878,7 @@ export const zOAuthConsentChallenge = z.object({
   redirect_uri: z.url(),
   resource_display_name: z.string(),
   scopes: z.array(z.string()),
+  verified_client: zOAuthConsentVerifiedClient.optional(),
   workspaces: z.array(zOAuthConsentChallengeWorkspace)
 })
 
@@ -3538,7 +3567,7 @@ export const zBillingStatus = z.enum([
  */
 export const zBillingStatusResponse = z.object({
   action_url: z.string().optional(),
-  billing_rail: z.enum(['legacy_stripe', 'metronome', 'stripe']).optional(),
+  billing_rail: z.enum(['stripe']).optional(),
   billing_status: zBillingStatus.optional(),
   cancel_at: z.iso.datetime().optional(),
   current_period_start: z.iso.datetime().optional(),
@@ -5069,11 +5098,43 @@ export const zAgentMessage = z.object({
 })
 
 /**
+ * Anthropic-shaped error envelope on POST /api/agent/llm/v1/messages, written by the agent's LLM proxy or passed through from Anthropic.
+ */
+export const zAgentLlmError = z.object({
+  error: z.object({
+    message: z.string(),
+    reason: z.string().optional(),
+    type: z.string()
+  }),
+  type: z.enum(['error'])
+})
+
+/**
  * The (workspace, user) the agent service attributes the caller's requests to.
  */
 export const zAgentIdentity = z.object({
   user_id: z.string(),
   workspace_id: z.string()
+})
+
+/**
+ * The `data` of an agent_extension_changed WebSocket event. The local agent sends it after turning a custom node pack on or off, or removing it. The change is already on disk; dropping the event loses only the informational card.
+ */
+export const zAgentExtensionChangedData = z.object({
+  action: z.enum(['enabled', 'disabled', 'removed']),
+  agent_created: z.boolean(),
+  message_id: z.string(),
+  pack: z.string().min(1),
+  restart_required: z.boolean(),
+  thread_id: z.string()
+})
+
+/**
+ * Server-to-client agent_extension_changed frame on /ws.
+ */
+export const zAgentExtensionChangedFrame = z.object({
+  data: zAgentExtensionChangedData,
+  type: z.enum(['agent_extension_changed'])
 })
 
 /**
@@ -7315,7 +7376,7 @@ export const zGetCccPublicMediaBytesPath = z.object({
 })
 
 /**
- * Exact current LIVE bytes; authority checked before byte access; no-store
+ * Exact current LIVE bytes; authority checked before byte access; public, max-age=120, must-revalidate with a strong ETag
  */
 export const zGetCccPublicMediaBytesResponse = z.string()
 
@@ -7376,9 +7437,12 @@ export const zGetCccPublicCacheAuthorityResponse = z.object({
 })
 
 export const zGetCccRevisionItemPath = z.object({
-  rev: z.coerce.bigint().gte(BigInt(1)).max(BigInt('9223372036854775807'), {
-    error: 'Invalid value: Expected int64 to be <= 9223372036854775807'
-  }),
+  rev: z.coerce
+    .bigint()
+    .gte(BigInt(1))
+    .max(BigInt('9223372036854775807'), {
+      error: 'Invalid value: Expected int64 to be <= 9223372036854775807'
+    }),
   uid: z.uuid()
 })
 

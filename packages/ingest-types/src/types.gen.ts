@@ -1867,7 +1867,7 @@ export type ResubscribeRequest = {
 }
 
 /**
- * The newest open renewal invoice of the workspace's Stripe subscription (active, or canceled but not yet ended). Returned only to workspace owners on the stripe billing rail while billing_status is payment_failed or paused, or on the legacy_stripe billing rail while billing_status is payment_failed and its legacy subscription is past_due or unpaid, and not while a payment for it is processing. hosted_invoice_url is a bearer payment link.
+ * The newest open renewal invoice of the workspace's Stripe subscription (active, or canceled but not yet ended). Returned only to workspace owners on the stripe billing rail while billing_status is payment_failed or paused, and not while a payment for it is processing. hosted_invoice_url is a bearer payment link.
  */
 export type RenewalInvoice = {
   /**
@@ -1919,6 +1919,13 @@ export type ReleaseUnsupportedPack = {
    * The repository URL the pack's own pyproject.toml names, for matching only, never a verified source; empty when it names none.
    */
   repository: string
+}
+
+/**
+ * A 429 body with a fixed message and no machine-readable code.
+ */
+export type RateLimitExceededError = {
+  error: string
 }
 
 /**
@@ -2859,6 +2866,33 @@ export type OAuthProtectedResourceMetadata = {
 }
 
 /**
+ * The platform this authorization code will be delivered to, when the
+ * request's validated redirect_uri is one of a known platform's own OAuth
+ * callbacks (ChatGPT, Claude). Derived server-side ONLY from the
+ * redirect_uri this request was byte-matched against at GET time —
+ * never from the registrant-supplied client_name — against a
+ * version-controlled registry of exact callbacks and anchored callback
+ * patterns (no host-only or prefix matching). Present only on `dynamic`
+ * clients; omitted for first-party clients and for any redirect that is
+ * not a registered platform callback. It verifies the destination
+ * platform, NOT that the registrant is that platform's own app (any
+ * connector on the platform can hold such a callback), so consumers
+ * should label it by `display_name` and still show the redirect host.
+ * `client_display_name` is unchanged and remains registrant-supplied.
+ *
+ */
+export type OAuthConsentVerifiedClient = {
+  /**
+   * Human-readable platform name from the server registry (e.g. "ChatGPT"), never from client_name.
+   */
+  display_name: string
+  /**
+   * Stable identifier of the verified platform.
+   */
+  platform: 'chatgpt' | 'claude'
+}
+
+/**
  * One workspace option presented in the OAuth consent challenge. Promoted to a named schema so the generated Go type is referenceable in handlers and tests rather than re-declared as an anonymous struct at every callsite.
  *
  */
@@ -2915,6 +2949,7 @@ export type OAuthConsentChallenge = {
    * Scopes the client is requesting for this resource. The frontend should present these for the user to approve.
    */
   scopes: Array<string>
+  verified_client?: OAuthConsentVerifiedClient
   /**
    * Workspaces the user can select from. Membership is re-checked on POST.
    */
@@ -5606,9 +5641,9 @@ export type BillingStatusResponse = {
    */
   action_url?: string
   /**
-   * Durable workspace billing authority. Omitted by older servers and billing-disabled deployments.
+   * Durable workspace billing authority. Omitted by older servers, billing-disabled deployments and workspaces not on the stripe rail.
    */
-  billing_rail?: 'legacy_stripe' | 'metronome' | 'stripe'
+  billing_rail?: 'stripe'
   billing_status?: BillingStatus
   /**
    * When the subscription will become inactive (if canceled)
@@ -5643,7 +5678,7 @@ export type BillingStatusResponse = {
    */
   max_seats: number
   /**
-   * The next charge to the card on file, from Stripe's invoice preview, recorded when the subscription changes and refreshed at least daily. Always present; null when nothing is due or it is unknown: no active subscription, a pending cancellation, paused collection, an Enterprise or sales-invoiced plan, a zero invoice, a preview not yet recorded, or a recorded date that has passed. Also null on the legacy_stripe billing rail and for callers who are not workspace billing managers. Never a catalog price; hide the line on null rather than estimate.
+   * The next charge to the card on file, from Stripe's invoice preview, recorded when the subscription changes and refreshed at least daily. Always present; null when nothing is due or it is unknown: no active subscription, a pending cancellation, paused collection, an Enterprise or sales-invoiced plan, a zero invoice, a preview not yet recorded, or a recorded date that has passed. Also null for callers who are not workspace billing managers. Never a catalog price; hide the line on null rather than estimate.
    */
   next_charge: NextCharge | null
   /**
@@ -8351,11 +8386,64 @@ export type AgentMessage = {
 }
 
 /**
+ * Anthropic-shaped error envelope on POST /api/agent/llm/v1/messages, written by the agent's LLM proxy or passed through from Anthropic.
+ */
+export type AgentLlmError = {
+  error: {
+    /**
+     * A human-readable explanation.
+     */
+    message: string
+    /**
+     * Set only on the proxy's admission refusals: the capacity wait (`queue_full`, `queue_position`, `user_inflight`, `workspace_inflight` or `lease_capped`) or the pause (`agent_paused` or `workspace_paused`). Absent on Anthropic's own errors.
+     */
+    reason?: string
+    /**
+     * The error category, such as `rate_limit_error` (a capacity wait, or Anthropic throttling the call) or `paused` (an operator paused the Agent or the workspace). Clients must accept unknown values.
+     */
+    type: string
+  }
+  type: 'error'
+}
+
+/**
  * The (workspace, user) the agent service attributes the caller's requests to.
  */
 export type AgentIdentity = {
   user_id: string
   workspace_id: string
+}
+
+/**
+ * Server-to-client agent_extension_changed frame on /ws.
+ */
+export type AgentExtensionChangedFrame = {
+  data: AgentExtensionChangedData
+  type: 'agent_extension_changed'
+}
+
+/**
+ * The `data` of an agent_extension_changed WebSocket event. The local agent sends it after turning a custom node pack on or off, or removing it. The change is already on disk; dropping the event loses only the informational card.
+ */
+export type AgentExtensionChangedData = {
+  /**
+   * What the agent did to the pack.
+   */
+  action: 'enabled' | 'disabled' | 'removed'
+  /**
+   * Whether this install's signed install record claims the pack.
+   */
+  agent_created: boolean
+  message_id: string
+  /**
+   * The pack's folder name in custom_nodes, without the .disabled suffix.
+   */
+  pack: string
+  /**
+   * Whether ComfyUI must restart for the change to apply.
+   */
+  restart_required: boolean
+  thread_id: string
 }
 
 /**
@@ -9184,6 +9272,10 @@ export type AgentLlmMessagesErrors = {
    */
   404: ErrorResponse
   /**
+   * Too many requests, with one of two bodies. RateLimitExceededError (`error` is a string): ingest refused the request before it reached the agent, so nothing ran, and no Retry-After is sent. AgentLLMError (`error` is an object): the agent's LLM proxy held the round for capacity past its wait (`error.type` `rate_limit_error`), an operator paused the Agent or the workspace (`error.type` `paused`), or Anthropic throttled the call.
+   */
+  429: RateLimitExceededError | AgentLlmError
+  /**
    * Agent service unavailable
    */
   502: ErrorResponse
@@ -9705,6 +9797,10 @@ export type AgentAnswerAskErrors = {
    */
   422: AgentError
   /**
+   * Rate limit exceeded: the request was refused before it reached the agent, so nothing ran. The body is a fixed message with no code to branch on.
+   */
+  429: RateLimitExceededError
+  /**
    * Internal server error (ingest-raised failures use the standard ErrorResponse shape instead)
    */
   500: AgentError
@@ -9816,6 +9912,10 @@ export type AgentPostMessageErrors = {
    * One or more attachments name a file type the agent does not accept. The body names the offending references and carries the full accepted policy, so the client can explain the refusal without hardcoding the list.
    */
   422: AgentAttachmentError
+  /**
+   * Rate limit exceeded: the request was refused before it reached the agent, so nothing ran. The body is a fixed message with no code to branch on.
+   */
+  429: RateLimitExceededError
   /**
    * Internal server error (ingest-raised failures use the standard ErrorResponse shape instead)
    */
@@ -18460,18 +18560,18 @@ export type GetCccPublicMediaBytesData = {
 
 export type GetCccPublicMediaBytesErrors = {
   /**
-   * Missing or unverifiable authority, unpublished/scheduled/private, or query alias
+   * Missing or unverifiable authority, unpublished/scheduled/private, or query alias; no-store
    */
   404: unknown
   /**
-   * Requested range is outside the file
+   * Requested range is outside the file; no-store
    */
   416: unknown
 }
 
 export type GetCccPublicMediaBytesResponses = {
   /**
-   * Exact current LIVE bytes; authority checked before byte access; no-store
+   * Exact current LIVE bytes; authority checked before byte access; public, max-age=120, must-revalidate with a strong ETag
    */
   200: Blob | File
   /**
@@ -18502,7 +18602,7 @@ export type HeadCccPublicMediaBytesErrors = {
 
 export type HeadCccPublicMediaBytesResponses = {
   /**
-   * Headers of the current LIVE bytes; no-store; no body
+   * Headers of the current LIVE bytes; public, max-age=120, must-revalidate; no body
    */
   200: unknown
 }
