@@ -11,6 +11,86 @@
     },
     "shareTooltip": "Partager le workflow"
   },
+  "addCreditsDialog": {
+    "amountError": {
+      "above_max": "La recharge maximale est de {amount}. Ajoutez-en davantage avec une autre recharge.",
+      "below_min": "Le minimum est de {amount}.",
+      "whole_dollars": "Dollars entiers uniquement."
+    },
+    "blocked": {
+      "action": "Ouvrir le paiement",
+      "body": "Votre navigateur a bloqué le nouvel onglet. Ouvrez le paiement pour terminer le règlement.",
+      "title": "Le paiement ne s’est pas ouvert"
+    },
+    "checkoutFailed": {
+      "body": "Aucun montant n’a été débité. Réessayez.",
+      "title": "Impossible d’ouvrir le paiement"
+    },
+    "close": "Fermer",
+    "continue": "Continuer",
+    "credits": "{credits} crédits",
+    "creditsUnavailable": "— crédits",
+    "customAmountLabel": "Ou saisissez un montant",
+    "messageSupport": "envoyer un message à l’assistance",
+    "needsVerification": {
+      "action": "Vérifier le paiement",
+      "body": "Votre banque attend que vous le confirmiez. Vérifiez-le pour terminer ce rechargement.",
+      "footer": "{amount}, non vérifié",
+      "title": "Votre paiement de {amount} doit être vérifié",
+      "titleNoAmount": "Votre paiement doit être vérifié"
+    },
+    "negativeBalance": "Votre solde est de −{credits} crédits. Cette recharge couvre d’abord ce montant.",
+    "notAllowed": {
+      "body": "Consultez les paramètres de facturation pour savoir pourquoi.",
+      "title": "Vous ne pouvez pas ajouter de crédits pour le moment"
+    },
+    "notVerified": {
+      "action": "Contacter l’assistance",
+      "body": "Votre banque ne l’a pas confirmé. Réessayez plus tard ou contactez l’assistance.",
+      "footer": "Non vérifié",
+      "footerTitle": "Rechargement de {amount}",
+      "title": "Votre paiement de {amount} n’a pas été vérifié",
+      "titleNoAmount": "Votre paiement n’a pas été vérifié"
+    },
+    "opened": {
+      "amount": "Montant",
+      "body": "Les crédits sont ajoutés à cet espace de travail dès que votre paiement est effectué.",
+      "credits": "Crédits",
+      "reopen": "Rouvrir le paiement",
+      "title": "Le paiement s’est ouvert dans un nouvel onglet",
+      "titleBrowser": "Le paiement s’est ouvert dans votre navigateur"
+    },
+    "opening": "Ouverture…",
+    "paidAtCheckout": "{amount}, payé lors du passage en caisse",
+    "planLine": {
+      "ended": "L’achat de crédits ne redémarre pas votre forfait Cloud. Réabonnez-vous pour exécuter des workflows sur Cloud.",
+      "free_runs": "L’achat de crédits ne démarre pas un forfait Cloud. Abonnez-vous pour continuer à exécuter des workflows une fois vos exécutions gratuites épuisées.",
+      "no_plan": "L’achat de crédits ne démarre pas de forfait Cloud. Abonnez-vous pour exécuter des workflows sur Cloud."
+    },
+    "processing": {
+      "body": "Inutile de payer à nouveau.",
+      "title": "Un paiement de {amount} est toujours en cours de traitement",
+      "titleNoAmount": "Un paiement est toujours en cours de traitement"
+    },
+    "purchasesPaused": {
+      "body": "Réessayez plus tard ou {support}.",
+      "title": "L’achat de crédits n’est pas disponible pour le moment"
+    },
+    "rateLimited": {
+      "body": "Réessayez dans {wait} ou {support}.",
+      "bodyNoWait": "Réessayez plus tard ou {support}.",
+      "title": "Vous avez atteint la limite de rechargement pour le moment"
+    },
+    "title": "Ajouter des crédits",
+    "wait": {
+      "day": "un jour",
+      "days": "{count} jours",
+      "hour": "une heure",
+      "hours": "{count} heures",
+      "minute": "une minute",
+      "minutes": "{count} minutes"
+    }
+  },
   "agent": {
     "addFromAssets": "Glissez une ressource depuis le panneau des ressources",
     "addNodesFromGraph": "Mentionner des nœuds du graphe",
@@ -48,6 +128,7 @@
     "backToPreviousChat": "Retour à la discussion précédente",
     "beta": "BÊTA",
     "canvasIsEmptyAfterTurn": "Ce canevas est vide — aucun élément n’y a été ajouté. Il n’y a encore rien à exécuter, enregistrer ou exporter.",
+    "canvasNotReadyForSend": "Le canevas de cet onglet n’est pas encore prêt, votre message n’a donc pas été envoyé. Réessayez dans un instant.",
     "changeWorkflowForChat": "Modifier le workflow que l’agent peut modifier",
     "chatOptions": "Options de discussion",
     "chooseWorkflow": "Choisir un workflow",
@@ -132,6 +213,12 @@
     "entryFailedReason": "ComfyUI n’a pas pu démarrer l’agent : {reason}",
     "entryStarting": "Démarrage de l’agent…",
     "entryStartingReason": "ComfyUI démarre l’agent : {reason}",
+    "extensionChange": {
+      "disabled": "Pack de nœuds {pack} désactivé",
+      "enabled": "Pack de nœuds {pack} activé",
+      "removed": "Pack de nœuds {pack} supprimé",
+      "restartHint": "Cela prendra effet après le redémarrage de ComfyUI. Rechargez cette page après le redémarrage."
+    },
     "feedbackCaption": "Partager vos commentaires",
     "focusNode": "Afficher sur le canevas",
     "focusNodeLabel": "Afficher {node} sur le canevas",
@@ -297,6 +384,7 @@
     "targetWorkflowUnavailable": "Le workflow cible n'est plus disponible.",
     "thinking": "Réflexion...",
     "title": "Comfy Agent",
+    "toolFailed": "Échec de {tool}",
     "toolFailedSkill": "Échec du chargement de {skill}",
     "toolForgettingPreference": "Oubli d’une préférence",
     "toolForgotPreference": "A oublié une préférence",
@@ -305,9 +393,14 @@
     "toolNotConfirmedOnCanvas": "{tool} — non confirmé sur votre canevas",
     "toolOpenedNewTab": "A ouvert un nouvel onglet",
     "toolOpeningNewTab": "Ouverture d’un nouvel onglet",
+    "toolOutcomeUnknown": "{tool} — résultat inconnu",
+    "toolRemovedNodePack": "Pack de nœuds supprimé",
+    "toolRemovingNodePack": "Suppression d’un pack de nœuds",
     "toolSavedPreference": "A enregistré une préférence",
     "toolSavingPreference": "Enregistrement d’une préférence",
+    "toolSwitchedNodePack": "Pack de nœuds changé",
     "toolSwitchedTabs": "A changé d’onglet",
+    "toolSwitchingNodePack": "Changement de pack de nœuds",
     "toolSwitchingTabs": "Changement d’onglet",
     "typeToSearch": "saisissez pour rechercher",
     "unavailableWorkflowReference": "{name} (indisponible)",
@@ -1236,13 +1329,18 @@
   "credits": {
     "accountInitialized": "Compte initialisé",
     "activity": "Activité",
+    "addCreditsRefusal": {
+      "paymentPastDue": "Mettez à jour votre mode de paiement pour ajouter des crédits.",
+      "topupPurchasesPaused": "L’achat de crédits n’est pas disponible pour le moment. Réessayez plus tard ou contactez l’assistance.",
+      "unavailable": "L’ajout de crédits n’est pas disponible pour cet espace de travail pour le moment."
+    },
     "added": "Ajouté",
     "additionalInfo": "Informations supplémentaires",
     "api": "API",
     "apiPricing": "Tarification de l’API",
     "charge": "Débiter",
+    "creditUnit": "Crédit | Crédits",
     "credits": "Crédits",
-    "creditUnit": "Crédits",
     "creditsAvailable": "Crédits disponibles",
     "details": "Détails",
     "eventType": "Type d'événement",
@@ -5934,6 +6032,7 @@
         "localBody": "Il vous reste {credits} crédit. Ajoutez des crédits pour continuer à utiliser les Partner Nodes. | Il vous reste {credits} crédits. Ajoutez des crédits pour continuer à utiliser les Partner Nodes.",
         "memberBody": "Il reste {credits} crédit à cet espace de travail. Demandez au propriétaire de l’espace de travail d’ajouter des crédits avant de les épuiser. | Il reste {credits} crédits à cet espace de travail. Demandez au propriétaire de l’espace de travail d’ajouter des crédits avant de les épuiser.",
         "ownerBody": "Il reste {credits} crédit à cet espace de travail. Ajoutez des crédits avant de les épuiser. | Il reste {credits} crédits à cet espace de travail. Ajoutez des crédits avant de les épuiser.",
+        "pausedBody": "Il vous reste {credits} crédit. L’achat de crédits n’est pas disponible pour le moment. | Il vous reste {credits} crédits. L’achat de crédits n’est pas disponible pour le moment.",
         "personalBody": "Il vous reste {credits} crédit. Ajoutez des crédits avant de les épuiser. | Il vous reste {credits} crédits. Ajoutez des crédits avant de les épuiser.",
         "title": "Crédits bientôt épuisés"
       },
@@ -5947,8 +6046,14 @@
         "pastDueBody": "Votre équipe a utilisé tous ses crédits. Mettez à jour votre mode de paiement pour en ajouter davantage.",
         "pastDueMemberBody": "Votre équipe a utilisé tous ses crédits. Demandez au propriétaire de votre espace de travail de mettre à jour le mode de paiement.",
         "pastDuePersonalBody": "Vous avez utilisé tous vos crédits. Mettez à jour votre mode de paiement pour en ajouter davantage.",
+        "pausedBody": "Votre équipe a utilisé tous ses crédits. L’achat de crédits n’est pas disponible pour le moment. Les crédits seront rechargés le {date}.",
+        "pausedBodyNoDate": "Votre équipe a utilisé tous ses crédits. L’achat de crédits n’est pas disponible pour le moment. Réessayez plus tard ou contactez l’assistance.",
+        "pausedPersonalBody": "Vous avez utilisé tous vos crédits. L’achat de crédits n’est pas disponible pour le moment. Les crédits seront rechargés le {date}.",
+        "pausedPersonalBodyNoDate": "Vous avez utilisé tous vos crédits. L’achat de crédits n’est pas disponible pour le moment. Réessayez plus tard ou contactez l’assistance.",
         "personalBody": "Vous avez utilisé tous vos crédits. Ajoutez des crédits ou attendez qu'ils soient réapprovisionnés le {date}.",
         "personalBodyNoDate": "Vous avez utilisé tous vos crédits. Ajoutez des crédits.",
+        "refusedBody": "Votre équipe a utilisé tous ses crédits.",
+        "refusedPersonalBody": "Vous avez utilisé tous vos crédits.",
         "title": "Plus de crédits"
       },
       "parked": {
@@ -5993,6 +6098,7 @@
     "billingTab": {
       "autoTopUp": {
         "actions": {
+          "addPaymentMethod": "Ajouter un mode de paiement",
           "manage": "Gérer",
           "turnOn": "Activer",
           "updatePayment": "Mettre à jour le paiement"
@@ -6003,8 +6109,10 @@
         "limitTooltipNoDate": "Ne compte que les paiements de rechargement automatique.",
         "maximumReached": "Maximum mensuel atteint. Réinitialisation le {date}.",
         "maximumReachedNoDate": "Maximum mensuel atteint.",
-        "member": "Les crédits peuvent être rechargés automatiquement lorsqu'ils sont bas. Contactez un propriétaire de l'espace de travail pour gérer ce paramètre.",
-        "off": "Recharge les crédits lorsque votre solde est faible",
+        "member": "Les crédits peuvent être rechargés automatiquement lorsqu’ils sont faibles. Contactez le propriétaire de l’espace de travail pour gérer cette option.",
+        "noDefaultPaymentMethod": "La recharge automatique nécessite un mode de paiement par défaut. Définissez-en un pour l’activer.",
+        "noPaymentMethod": "La recharge automatique nécessite un mode de paiement. Ajoutez-en un pour l’activer.",
+        "off": "Recharge les crédits lorsque votre solde est faible.",
         "onHold": "Aucun moyen de paiement par défaut. Définissez-en un pour reprendre le rechargement automatique.",
         "paused": "Limite mensuelle atteinte. Reprend le {date}.",
         "pausedByRemainder": "La prochaine recharge dépasserait votre limite mensuelle. Reprise le {date}.",
@@ -6032,13 +6140,13 @@
         "overdrawn": "Vos exécutions ont utilisé {count} crédit de plus que vous n’en aviez. | Vos exécutions ont utilisé {count} crédits de plus que vous n’en aviez.",
         "plan": "Forfait",
         "planOfPool": "{remaining} sur {total}",
-        "planTooltip": "Crédits inclus dans votre forfait. Ils sont renouvelés à chaque période de facturation.",
+        "planTooltip": "Les crédits du forfait sont utilisés avant les crédits rechargés.",
         "planUsed": "{percent} % utilisés",
-        "rateInfo": "À propos des crédits",
-        "rateTooltip": "Les crédits servent à payer les exécutions. {credits} crédits = 1 $",
         "title": "Crédits",
+        "tooltip": "Les crédits fonctionnent avec Comfy Cloud, ComfyUI et Comfy API.",
+        "tooltipLabel": "À propos des crédits",
         "topUp": "Recharger",
-        "topUpTooltip": "Crédits que vous avez ajoutés. Ils sont utilisés une fois les crédits du forfait épuisés.",
+        "topUpTooltip": "Utilisés après épuisement des crédits du forfait.",
         "unavailable": "Impossible de charger votre solde."
       },
       "footer": {
@@ -6366,7 +6474,7 @@
     "createWorkspace": "Créer un nouvel espace de travail",
     "failedToSwitch": "Échec du changement d’espace de travail",
     "managedByOrganization": "Votre organisation gère vos espaces de travail, vous ne pouvez donc pas en créer.",
-    "maxWorkspacesReached": "Vous ne pouvez posséder que {max} espaces de travail. Supprimez-en un pour en créer un nouveau.",
+    "maxWorkspacesReached": "Vous ne pouvez posséder que {max} espace de travail. Supprimez-le pour en créer un nouveau. | Vous ne pouvez posséder que {max} espaces de travail. Supprimez-en un pour en créer un nouveau.",
     "personal": "Personnel",
     "roleMember": "Membre",
     "roleOwner": "Propriétaire",

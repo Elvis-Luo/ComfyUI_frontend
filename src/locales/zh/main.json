@@ -11,6 +11,86 @@
     },
     "shareTooltip": "分享工作流"
   },
+  "addCreditsDialog": {
+    "amountError": {
+      "above_max": "单次最高充值金额为 {amount}。如需添加更多积分，请再次充值。",
+      "below_min": "最低金额为 {amount}。",
+      "whole_dollars": "仅限整数美元。"
+    },
+    "blocked": {
+      "action": "打开结账页面",
+      "body": "你的浏览器阻止了新标签页。请打开结账页面以完成支付。",
+      "title": "结账页面未打开"
+    },
+    "checkoutFailed": {
+      "body": "未产生任何扣款。请重试。",
+      "title": "无法打开结账页面"
+    },
+    "close": "关闭",
+    "continue": "继续",
+    "credits": "{credits} 积分",
+    "creditsUnavailable": "— 积分",
+    "customAmountLabel": "或输入金额",
+    "messageSupport": "联系支持团队",
+    "needsVerification": {
+      "action": "验证付款",
+      "body": "您的银行正在等待您确认。请完成验证以完成此次充值。",
+      "footer": "{amount}，未验证",
+      "title": "您的 {amount} 付款需要验证",
+      "titleNoAmount": "您的付款需要验证"
+    },
+    "negativeBalance": "您的余额为 −{credits} 积分。此次充值会先抵扣该欠款。",
+    "notAllowed": {
+      "body": "请查看账单设置以了解原因。",
+      "title": "您目前无法添加积分"
+    },
+    "notVerified": {
+      "action": "联系支持团队",
+      "body": "您的银行未确认该付款。请稍后重试，或联系支持团队。",
+      "footer": "未验证",
+      "footerTitle": "充值 {amount}",
+      "title": "您的 {amount} 付款未通过验证",
+      "titleNoAmount": "您的付款未通过验证"
+    },
+    "opened": {
+      "amount": "金额",
+      "body": "您的付款成功后，积分将立即添加到此工作区。",
+      "credits": "积分",
+      "reopen": "重新打开结账页面",
+      "title": "结账页面已在新标签页中打开",
+      "titleBrowser": "结账页面已在您的浏览器中打开"
+    },
+    "opening": "正在打开…",
+    "paidAtCheckout": "{amount}，在结账时支付",
+    "planLine": {
+      "ended": "购买积分不会重新启动您的 Cloud 套餐。请重新订阅以在 Cloud 上运行工作流。",
+      "free_runs": "购买积分不会开启 Cloud 套餐。免费运行次数用完后，请订阅以继续运行工作流。",
+      "no_plan": "购买积分不会启动 Cloud 套餐。请订阅以在 Cloud 上运行工作流。"
+    },
+    "processing": {
+      "body": "无需再次付款。",
+      "title": "一笔 {amount} 付款仍在处理中",
+      "titleNoAmount": "一笔付款仍在处理中"
+    },
+    "purchasesPaused": {
+      "body": "请稍后重试，或{support}。",
+      "title": "目前无法购买积分"
+    },
+    "rateLimited": {
+      "body": "请在 {wait} 后重试，或{support}。",
+      "bodyNoWait": "请稍后重试，或{support}。",
+      "title": "您暂时已达到充值限额"
+    },
+    "title": "添加积分",
+    "wait": {
+      "day": "一天",
+      "days": "{count} 天",
+      "hour": "一小时",
+      "hours": "{count} 小时",
+      "minute": "一分钟",
+      "minutes": "{count} 分钟"
+    }
+  },
   "agent": {
     "addFromAssets": "从资源面板拖入资源",
     "addNodesFromGraph": "提及画布中的节点",
@@ -48,6 +128,7 @@
     "backToPreviousChat": "返回上一个聊天",
     "beta": "测试版",
     "canvasIsEmptyAfterTurn": "此画布为空——尚未向其中添加任何内容。这里还没有可运行、保存或导出的内容。",
+    "canvasNotReadyForSend": "此标签页的画布尚未准备就绪，因此您的消息未发送。请稍后重试。",
     "changeWorkflowForChat": "更改代理可编辑的工作流",
     "chatOptions": "聊天选项",
     "chooseWorkflow": "选择工作流",
@@ -132,6 +213,12 @@
     "entryFailedReason": "ComfyUI 无法启动智能体：{reason}",
     "entryStarting": "智能体正在启动…",
     "entryStartingReason": "ComfyUI 正在启动智能体：{reason}",
+    "extensionChange": {
+      "disabled": "已关闭节点包 {pack}",
+      "enabled": "已启用节点包 {pack}",
+      "removed": "已移除节点包 {pack}",
+      "restartHint": "重启 ComfyUI 后生效。重启后请重新加载此页面。"
+    },
     "feedbackCaption": "分享反馈",
     "focusNode": "在画布上显示",
     "focusNodeLabel": "在画布上显示 {node}",
@@ -297,6 +384,7 @@
     "targetWorkflowUnavailable": "目标工作流已不可用。",
     "thinking": "思考中...",
     "title": "Comfy Agent",
+    "toolFailed": "{tool} 失败",
     "toolFailedSkill": "加载 {skill} 失败",
     "toolForgettingPreference": "正在删除偏好设置",
     "toolForgotPreference": "已忘记偏好设置",
@@ -305,9 +393,14 @@
     "toolNotConfirmedOnCanvas": "{tool} — 未在你的画布上确认",
     "toolOpenedNewTab": "已打开新标签页",
     "toolOpeningNewTab": "正在打开新标签页",
+    "toolOutcomeUnknown": "{tool} — 结果未知",
+    "toolRemovedNodePack": "已移除一个节点包",
+    "toolRemovingNodePack": "正在移除节点包",
     "toolSavedPreference": "已保存偏好设置",
     "toolSavingPreference": "正在保存偏好设置",
+    "toolSwitchedNodePack": "已切换节点包",
     "toolSwitchedTabs": "已切换标签页",
+    "toolSwitchingNodePack": "正在切换节点包",
     "toolSwitchingTabs": "正在切换标签页",
     "typeToSearch": "输入以搜索",
     "unavailableWorkflowReference": "{name}（不可用）",
@@ -1236,13 +1329,18 @@
   "credits": {
     "accountInitialized": "账户已初始化",
     "activity": "活动",
+    "addCreditsRefusal": {
+      "paymentPastDue": "更新您的付款方式以添加积分。",
+      "topupPurchasesPaused": "当前无法购买积分。请稍后重试，或联系支持团队。",
+      "unavailable": "目前无法为此工作区添加积分。"
+    },
     "added": "已添加",
     "additionalInfo": "附加信息",
     "api": "API",
     "apiPricing": "API 价格",
     "charge": "扣费",
+    "creditUnit": "积分 | 积分",
     "credits": "积分",
-    "creditUnit": "积分",
     "creditsAvailable": "积分可用",
     "details": "详情",
     "eventType": "事件类型",
@@ -5934,6 +6032,7 @@
         "localBody": "你还剩 {credits} 积分。添加积分以继续运行合作伙伴节点。|你还剩 {credits} 积分。添加积分以继续运行合作伙伴节点。",
         "memberBody": "此工作区还剩 {credits} 积分。请让工作区所有者在用完前添加积分。|此工作区还剩 {credits} 积分。请让工作区所有者在用完前添加积分。",
         "ownerBody": "此工作区还剩 {credits} 积分。请在用完前添加积分。|此工作区还剩 {credits} 积分。请在用完前添加积分。",
+        "pausedBody": "您还剩 {credits} 积分。目前无法购买积分。 | 您还剩 {credits} 积分。目前无法购买积分。",
         "personalBody": "你还剩 {credits} 积分。请在用完前添加积分。|你还剩 {credits} 积分。请在用完前添加积分。",
         "title": "积分不足"
       },
@@ -5947,8 +6046,14 @@
         "pastDueBody": "你的团队已用完所有积分。请更新付款方式以添加更多积分。",
         "pastDueMemberBody": "你的团队已用完所有积分。请让你的工作区所有者更新付款方式。",
         "pastDuePersonalBody": "你已用完所有积分。请更新付款方式以添加更多积分。",
+        "pausedBody": "您的团队已用完所有积分。目前无法购买积分。积分将于 {date} 充值。",
+        "pausedBodyNoDate": "您的团队已用完所有积分。目前无法购买积分。请稍后重试，或联系支持团队。",
+        "pausedPersonalBody": "您已用完所有积分。目前无法购买积分。积分将于 {date} 充值。",
+        "pausedPersonalBodyNoDate": "您已用完所有积分。目前无法购买积分。请稍后重试，或联系支持团队。",
         "personalBody": "您的积分已用完。请添加更多积分，或等待积分于 {date} 补充。",
         "personalBodyNoDate": "您的积分已用完。请添加更多积分。",
+        "refusedBody": "您的团队已用完所有积分。",
+        "refusedPersonalBody": "您已用完所有积分。",
         "title": "积分已用完"
       },
       "parked": {
@@ -5993,6 +6098,7 @@
     "billingTab": {
       "autoTopUp": {
         "actions": {
+          "addPaymentMethod": "添加付款方式",
           "manage": "管理",
           "turnOn": "开启",
           "updatePayment": "更新付款方式"
@@ -6003,8 +6109,10 @@
         "limitTooltipNoDate": "仅统计自动充值的扣费。",
         "maximumReached": "已达到月度最高限额。将于 {date} 重置。",
         "maximumReachedNoDate": "已达到月度最高限额。",
-        "member": "积分不足时可自动充值。如需管理，请联系工作区所有者。",
-        "off": "当你的余额不足时自动补充积分",
+        "member": "积分不足时可自动充值。请联系工作区所有者进行管理。",
+        "noDefaultPaymentMethod": "自动充值需要默认付款方式。设置默认付款方式以启用自动充值。",
+        "noPaymentMethod": "自动充值需要付款方式。添加付款方式以启用自动充值。",
+        "off": "余额不足时自动补充积分。",
         "onHold": "没有默认付款方式。请设置一个以恢复自动充值。",
         "paused": "已达到每月限额。将于 {date} 恢复。",
         "pausedByRemainder": "下一次充值将超过你的月度限额。将于 {date} 恢复。",
@@ -6032,13 +6140,13 @@
         "overdrawn": "你的运行次数比现有积分多用了 {count} 个。|你的运行次数比现有积分多用了 {count} 个。",
         "plan": "套餐",
         "planOfPool": "{total} 中的 {remaining}",
-        "planTooltip": "套餐包含的积分。每个计费周期都会补充。",
+        "planTooltip": "套餐积分会优先于充值积分使用。",
         "planUsed": "已使用 {percent}%",
-        "rateInfo": "关于积分",
-        "rateTooltip": "积分用于支付运行费用。{credits} 积分 = 1 美元。",
         "title": "积分",
+        "tooltip": "积分可在 Comfy Cloud、ComfyUI 和 Comfy API 中使用。",
+        "tooltipLabel": "关于积分",
         "topUp": "充值",
-        "topUpTooltip": "你添加的积分。套餐积分用完后将使用这些积分。",
+        "topUpTooltip": "套餐积分用完后使用。",
         "unavailable": "无法加载你的余额。"
       },
       "footer": {
@@ -6366,7 +6474,7 @@
     "createWorkspace": "创建新工作区",
     "failedToSwitch": "切换工作区失败",
     "managedByOrganization": "您的组织管理您的工作区，因此您无法创建工作区。",
-    "maxWorkspacesReached": "您最多只能拥有{max}个工作区。请删除一个以创建新工作区。",
+    "maxWorkspacesReached": "您最多只能拥有 {max} 个工作区。请删除该工作区以创建新的工作区。 | 您最多只能拥有 {max} 个工作区。请删除一个以创建新的工作区。",
     "personal": "个人",
     "roleMember": "成员",
     "roleOwner": "所有者",

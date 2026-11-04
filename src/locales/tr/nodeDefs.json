@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "Modelin yanıtlamadan önce ne kadar akıl yürüttüğü. 'default' seçimi modele bırakır. Desteklenen düzeyler modele göre değişir: GPT-6 Astra low-max, GPT-6 Sol/Luna ve GPT-5.6 none-max (minimal yok), GPT-5.5 none-xhigh, GPT-5.5 Pro medium-xhigh, GPT-5 minimal-high, o-series low-high; GPT-4.1’de akıl yürütme yoktur. Desteklenmeyen düzeyler istek gönderilmeden önce reddedilir."
+        "tooltip": "Desteklenen düzeyler modele göre değişir. Desteklenmeyen bir düzey çalıştırmayı durdurur ve geçerli olanları listeler. 'default', modelin seçmesine izin verir."
       },
       "truncation": {
         "name": "kırpma",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "Metinden görüntüye veya görsellerle, diğerlerini referans alarak image_1 üzerinde düzenleme. İstem bunlara <Picture 1>, <Picture 2>, ... olarak başvurur. Modelin 1.0/1.0 değerinde ModelSamplingMiniMaxH3'e ihtiyacı vardır.",
+    "display_name": "p-h3-image Koşullandırma",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "yükseklik",
+        "tooltip": "0, ölçeklendirme sonrasında image_1'in yüksekliğini veya görsel yoksa 2912'yi kullanır."
+      },
+      "images": {
+        "name": "görseller"
+      },
+      "prompt": {
+        "name": "istem",
+        "tooltip": "Görsellerle, kısa bir talimatın başına \"Edit <Picture 1>. \" eklenir; \"Edit <Picture\" ile başlayan bir talimat ve istem yükselticiden gelen düzenleme özeti olduğu gibi kullanılır."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "Görseller bağlandığında gerekli olan p-h3-image VAE'si."
+      },
+      "width": {
+        "name": "genişlik",
+        "tooltip": "0, ölçeklendirme sonrasında image_1'in genişliğini veya görsel yoksa 2912'yi kullanır."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "pozitif",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "Sonilo Music 1.5 kullanarak bir metin isteminden söylenmiş vokallere sahip bir şarkı oluşturun.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "oluşturma sonrası denetim"
+      },
+      "duration": {
+        "name": "süre",
+        "tooltip": "'auto', şarkı süresini sözlere uyarlar. Özel bir süre, sığmayan sözleri keser ve kısa olanları tekrarlar."
+      },
+      "prompt": {
+        "name": "istem",
+        "tooltip": "Şarkıyı açıklayın: tür, ruh hâli, enstrümanlar ve vokaller. Sözleri ayarlamak için [Verse] / [Chorus] etiketleri içeren bir 'Lyrics:' bloğu ekleyin; aksi takdirde model kendi sözlerini yazar. En fazla: 2000 karakter."
+      },
+      "seed": {
+        "name": "tohum",
+        "tooltip": "Tohum, düğümün yeniden çalıştırılıp çalıştırılmayacağını denetler; sonuçlar tohumdan bağımsız olarak deterministik değildir."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "Sonilo'nun yapay zeka modeliyle bir metin isteminden müzik oluşturun. Süreyi 0 olarak bırakın, model süreyi istemden çıkarsın.",
     "display_name": "Sonilo Metinden Müzik Üret",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "TextGenerate",
+    "display_name": "Metin Oluştur (KULLANIMDAN KALDIRILDI)",
     "inputs": {
       "audio": {
         "name": "ses"
@@ -26560,6 +26623,79 @@
     "outputs": {
       "0": {
         "name": "üretilen_metin",
+        "tooltip": null
+      },
+      "1": {
+        "name": "düşünme",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "Metin Oluştur",
+    "inputs": {
+      "audios": {
+        "name": "sesler"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "görseller"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "Kontrol noktasının çoklu belirteç tahmini başlığıyla spekülatif kod çözme. MTP ağırlıkları olmadan etkisi yoktur. auto, taslak derinliğini ve genişliğini gözlemlenen belirteç eşleşmelerine ve yürütme maliyetine göre uyarlar; 2-5 sabit bir taslak derinliği belirler; ağaç modları hem genişliği hem de derinliği belirler. Örneklenmiş çıktı doğru dağılımını korur, ancak aynı tohum için MTP olmayan çıktıdan farklıdır."
+      },
+      "prompt": {
+        "name": "istem"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "min_p"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "mevcudiyet cezası"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "tekrar cezası"
+      },
+      "sampling_mode_seed": {
+        "name": "tohum"
+      },
+      "sampling_mode_temperature": {
+        "name": "sıcaklık"
+      },
+      "sampling_mode_top_k": {
+        "name": "top_k"
+      },
+      "sampling_mode_top_p": {
+        "name": "top_p"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "Modelin sohbet şablonundaki sistem istemini değiştirir. Varsayılan şablon kullanılmadığında yok sayılır."
+      },
+      "thinking": {
+        "name": "düşünme",
+        "tooltip": "Model destekliyorsa düşünme modunda çalışır."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "Modelde varsa yerleşik sistem istemini/şablonunu kullanır."
+      },
+      "videos": {
+        "name": "videolar"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "oluşturulan metin",
         "tooltip": null
       },
       "1": {

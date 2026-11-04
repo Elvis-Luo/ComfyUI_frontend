@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "מידת ההנמקה שהמודל מבצע לפני המענה. 'default' משאיר את הבחירה למודל. הרמות הנתמכות משתנות לפי מודל: GPT-6 Astra low-max, GPT-6 Sol/Luna ו-GPT-5.6 none-max (ללא minimal), GPT-5.5 none-xhigh, GPT-5.5 Pro medium-xhigh, GPT-5 minimal-high, סדרת o low-high; ל-GPT-4.1 אין הנמקה. רמות שאינן נתמכות נדחות לפני שליחת הבקשה."
+        "tooltip": "הרמות הנתמכות משתנות לפי המודל. רמה שאינה נתמכת עוצרת את ההרצה ומציגה את הרמות התקפות. 'default' מאפשר למודל לבחור."
       },
       "truncation": {
         "name": "truncation",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "טקסט לתמונה, או עם תמונות — עריכה של image_1 כשהאחרות משמשות כהפניות. הפרומפט מתייחס אליהן בתור <Picture 1>, <Picture 2>, ... המודל זקוק ל-ModelSamplingMiniMaxH3 בערך 1.0/1.0.",
+    "display_name": "התניה של p-h3-image",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "גובה",
+        "tooltip": "0 משתמש בגובה של image_1 לאחר שינוי קנה מידה, או ב-2912 ללא תמונות."
+      },
+      "images": {
+        "name": "תמונות"
+      },
+      "prompt": {
+        "name": "פרומפט",
+        "tooltip": "עם תמונות, להנחיה קצרה מתווסף בתחילתה \"Edit <Picture 1>. \"; הנחיה המתחילה ב-\"Edit <Picture\" ותקציר עריכה ממגדיל הפרומפט משמשים כפי שהם."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "ה-VAE של p-h3-image, הנדרש כאשר מחוברות תמונות."
+      },
+      "width": {
+        "name": "רוחב",
+        "tooltip": "0 משתמש ברוחב של image_1 לאחר שינוי קנה מידה, או ב-2912 ללא תמונות."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "חיובי",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "יצירת שיר עם שירה קולית מפרומפט טקסט באמצעות Sonilo Music 1.5.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "control after generate"
+      },
+      "duration": {
+        "name": "משך",
+        "tooltip": "'auto' מתאים את אורך השיר למילים. אורך מותאם אישית חותך מילים שאינן מתאימות וחוזר על מילים קצרות."
+      },
+      "prompt": {
+        "name": "פרומפט",
+        "tooltip": "תארו את השיר: סוגה, אווירה, כלים ושירה. כדי להגדיר את המילים, הוסיפו בלוק 'Lyrics:' עם תגיות [Verse] / [Chorus]; בלעדיו, המודל כותב מילים משלו. מרבי: 2000 תווים."
+      },
+      "seed": {
+        "name": "זרע",
+        "tooltip": "הזרע קובע אם הצומת ירוץ מחדש; התוצאות אינן דטרמיניסטיות ללא קשר לזרע."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "יצירת מוזיקה מתוך הנחיה טקסטואלית באמצעות מודל הבינה המלאכותית של Sonilo.",
     "display_name": "Sonilo טקסט למוזיקה",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "יצירת טקסט",
+    "display_name": "יצירת טקסט (הוצא משימוש)",
     "inputs": {
       "audio": {
         "name": "אודיו"
@@ -26564,6 +26627,79 @@
       },
       "1": {
         "name": "thinking",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "יצירת טקסט",
+    "inputs": {
+      "audios": {
+        "name": "שמע"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "תמונות"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "פענוח ספקולטיבי באמצעות ראש חיזוי ריבוי-הטוקנים של נקודת הביקורת. אין השפעה ללא משקלי MTP. auto מתאים את עומק ורוחב הטיוטה להתאמות הטוקנים שנצפו ולעלות הביצוע; 2-5 מקבע עומק טיוטה קבוע; מצבי עץ מקבעים הן את הרוחב והן את העומק. הפלט שנדגם נשאר מפולג כראוי, אך שונה מפלט ללא MTP עבור אותו זרע."
+      },
+      "prompt": {
+        "name": "פרומפט"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "מינימום p"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "קנס נוכחות"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "קנס חזרתיות"
+      },
+      "sampling_mode_seed": {
+        "name": "זרע"
+      },
+      "sampling_mode_temperature": {
+        "name": "טמפרטורה"
+      },
+      "sampling_mode_top_k": {
+        "name": "k עליון"
+      },
+      "sampling_mode_top_p": {
+        "name": "p עליון"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "מחליף את פרומפט המערכת בתבנית הצ'אט של המודל. מתעלמים ממנו כאשר לא נעשה שימוש בתבנית ברירת המחדל."
+      },
+      "thinking": {
+        "name": "חשיבה",
+        "tooltip": "הפעלת מצב חשיבה אם המודל תומך בו."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "שימוש בפרומפט/תבנית המערכת המובנים, אם קיימים במודל."
+      },
+      "videos": {
+        "name": "סרטונים"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "טקסט שנוצר",
+        "tooltip": null
+      },
+      "1": {
+        "name": "חשיבה",
         "tooltip": null
       }
     }

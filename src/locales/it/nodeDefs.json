@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "Quanto il modello ragiona prima di rispondere. 'default' lascia la scelta al modello. I livelli supportati differiscono in base al modello: GPT-6 Astra low-max, GPT-6 Sol/Luna e GPT-5.6 none-max (senza minimal), GPT-5.5 none-xhigh, GPT-5.5 Pro medium-xhigh, GPT-5 minimal-high, serie o low-high; GPT-4.1 non dispone di ragionamento. I livelli non supportati vengono rifiutati prima dell'invio della richiesta."
+        "tooltip": "I livelli supportati variano in base al modello. Un livello non supportato interrompe l'esecuzione ed elenca quelli validi. 'default' lascia scegliere al modello."
       },
       "truncation": {
         "name": "troncamento",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "Da testo a immagine oppure, con le immagini, modifica di image_1 con le altre come riferimenti. Il prompt vi fa riferimento come <Picture 1>, <Picture 2>, ... Il modello richiede ModelSamplingMiniMaxH3 a 1.0/1.0.",
+    "display_name": "Condizionamento p-h3-image",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "altezza",
+        "tooltip": "0 usa l'altezza di image_1 dopo il ridimensionamento, oppure 2912 senza immagini."
+      },
+      "images": {
+        "name": "immagini"
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "Con le immagini, a una breve istruzione viene anteposto \"Edit <Picture 1>. \"; un'istruzione che inizia con \"Edit <Picture\" e una richiesta di modifica dall'upsampler del prompt vengono utilizzate così come sono."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "Il VAE p-h3-image, necessario quando sono collegate immagini."
+      },
+      "width": {
+        "name": "larghezza",
+        "tooltip": "0 usa la larghezza di image_1 dopo il ridimensionamento, oppure 2912 senza immagini."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "positivo",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "Genera una canzone con voce cantata a partire da un prompt di testo usando Sonilo Music 1.5.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "controllo dopo la generazione"
+      },
+      "duration": {
+        "name": "durata",
+        "tooltip": "'auto' adatta la durata della canzone al testo. Una durata personalizzata taglia il testo che non entra e ripete quello breve."
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "Descrivi la canzone: genere, atmosfera, strumenti e voce. Per impostare le parole, aggiungi un blocco 'Lyrics:' con tag [Verse] / [Chorus]; senza, il modello scrive il proprio testo. Massimo: 2000 caratteri."
+      },
+      "seed": {
+        "name": "seed",
+        "tooltip": "Il seed controlla se il nodo deve essere rieseguito; i risultati non sono deterministici indipendentemente dal seed."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "Genera musica da un prompt testuale utilizzando il modello AI di Sonilo.",
     "display_name": "Sonilo Testo in Musica",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "Genera Testo",
+    "display_name": "Genera testo (DEPRECATO)",
     "inputs": {
       "audio": {
         "name": "audio"
@@ -26560,6 +26623,79 @@
     "outputs": {
       "0": {
         "name": "testo_generato",
+        "tooltip": null
+      },
+      "1": {
+        "name": "ragionamento",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "Genera testo",
+    "inputs": {
+      "audios": {
+        "name": "audio"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "immagini"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "Decodifica speculativa con la testa di previsione multi-token del checkpoint. Nessun effetto senza pesi MTP. auto adatta la profondità e l'ampiezza della bozza alle corrispondenze di token osservate e al costo di esecuzione; 2-5 fissa una profondità della bozza costante; le modalità ad albero fissano sia l'ampiezza sia la profondità. L'output campionato mantiene la distribuzione corretta, ma differisce dall'output senza MTP per lo stesso seed."
+      },
+      "prompt": {
+        "name": "prompt"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "min_p"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "penalità di presenza"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "penalità di ripetizione"
+      },
+      "sampling_mode_seed": {
+        "name": "seme"
+      },
+      "sampling_mode_temperature": {
+        "name": "temperatura"
+      },
+      "sampling_mode_top_k": {
+        "name": "top_k"
+      },
+      "sampling_mode_top_p": {
+        "name": "top_p"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "Sostituisce il prompt di sistema nel template di chat del modello. Ignorato quando non viene usato il template predefinito."
+      },
+      "thinking": {
+        "name": "ragionamento",
+        "tooltip": "Opera in modalità di ragionamento se il modello la supporta."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "Usa il prompt di sistema/template integrato se il modello ne ha uno."
+      },
+      "videos": {
+        "name": "video"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "testo generato",
         "tooltip": null
       },
       "1": {

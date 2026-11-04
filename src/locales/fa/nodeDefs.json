@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "میزان استدلال مدل پیش از پاسخ‌گویی. «default» انتخاب را به مدل واگذار می‌کند. سطوح پشتیبانی‌شده برای هر مدل متفاوت‌اند: GPT-6 Astra low-max، GPT-6 Sol/Luna و GPT-5.6 none-max (بدون minimal)، GPT-5.5 none-xhigh، GPT-5.5 Pro medium-xhigh، GPT-5 minimal-high، و o-series low-high؛ GPT-4.1 استدلال ندارد. سطوح پشتیبانی‌نشده پیش از ارسال درخواست رد می‌شوند."
+        "tooltip": "سطوح پشتیبانی‌شده بسته به مدل متفاوت‌اند. سطح پشتیبانی‌نشده اجرا را متوقف می‌کند و سطح‌های معتبر را فهرست می‌کند. «default» به مدل اجازه می‌دهد انتخاب کند."
       },
       "truncation": {
         "name": "truncation",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "تبدیل متن به تصویر، یا در صورت وجود تصاویر، ویرایش image_1 با استفاده از سایر تصاویر به‌عنوان مرجع. پرامپت به آن‌ها با عنوان <Picture 1>، <Picture 2>، ... اشاره می‌کند. مدل در ۱.۰/۱.۰ به ModelSamplingMiniMaxH3 نیاز دارد.",
+    "display_name": "شرطی‌سازی p-h3-image",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "ارتفاع",
+        "tooltip": "۰ از ارتفاع image_1 پس از مقیاس‌بندی استفاده می‌کند، یا بدون تصاویر از ۲۹۱۲ استفاده می‌شود."
+      },
+      "images": {
+        "name": "تصاویر"
+      },
+      "prompt": {
+        "name": "پرامپت",
+        "tooltip": "در صورت وجود تصاویر، یک دستور کوتاه با «ویرایش <Picture 1>. » در ابتدا دریافت می‌کند؛ دستوری که با «ویرایش <Picture» آغاز شود و یک دستور ویرایش از پرامپت upsampler، بدون تغییر استفاده می‌شوند."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "VAE مربوط به p-h3-image که هنگام اتصال تصاویر لازم است."
+      },
+      "width": {
+        "name": "عرض",
+        "tooltip": "۰ از عرض image_1 پس از مقیاس‌بندی استفاده می‌کند، یا بدون تصاویر از ۲۹۱۲ استفاده می‌شود."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "مثبت",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "با استفاده از Sonilo Music ۱.۵، از یک پرامپت متنی آهنگی با آواز خوانده‌شده تولید کنید.",
+    "display_name": "Sonilo Music ۱.۵",
+    "inputs": {
+      "control_after_generate": {
+        "name": "کنترل پس از تولید"
+      },
+      "duration": {
+        "name": "مدت‌زمان",
+        "tooltip": "«auto» طول آهنگ را با متن ترانه هماهنگ می‌کند. طول سفارشی، متن ترانه‌ای را که جا نمی‌شود قطع می‌کند و متن‌های کوتاه را تکرار می‌کند."
+      },
+      "prompt": {
+        "name": "پرامپت",
+        "tooltip": "آهنگ را توصیف کنید: سبک، حال‌وهوا، سازها و آواز. برای تعیین کلمات، یک بلوک «Lyrics:» با برچسب‌های [Verse] / [Chorus] اضافه کنید؛ بدون آن، مدل متن ترانه را خودش می‌نویسد. حداکثر: ۲۰۰۰ نویسه."
+      },
+      "seed": {
+        "name": "بذر",
+        "tooltip": "بذر تعیین می‌کند که آیا node باید دوباره اجرا شود یا نه؛ نتایج صرف‌نظر از بذر غیرقطعی هستند."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "تولید موسیقی از یک پرامپت متنی با استفاده از مدل هوش مصنوعی Sonilo. مدت زمان را روی ۰ قرار دهید تا مدل آن را از پرامپت تشخیص دهد.",
     "display_name": "تبدیل متن به موسیقی با Sonilo",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "تولید متن",
+    "display_name": "تولید متن (منسوخ)",
     "inputs": {
       "audio": {
         "name": "صدا"
@@ -26564,6 +26627,79 @@
       },
       "1": {
         "name": "تفکر",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "تولید متن",
+    "inputs": {
+      "audios": {
+        "name": "صداها"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "تصاویر"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "رمزگشایی گمانه‌زنانه با head پیش‌بینی چندتوکنی checkpoint. بدون وزن‌های MTP اثری ندارد. auto عمق و گستره پیش‌نویس را با تطابق‌های مشاهده‌شدهٔ توکن و هزینهٔ اجرا سازگار می‌کند؛ ۲–۵ عمق ثابت پیش‌نویس را تعیین می‌کند؛ حالت‌های tree هم گستره و هم عمق را تعیین می‌کنند. خروجی نمونه‌برداری‌شده همچنان توزیع درستی دارد، اما برای بذر یکسان با خروجی غیر-MTP متفاوت است."
+      },
+      "prompt": {
+        "name": "پرامپت"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "min_p"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "presence_penalty"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "repetition_penalty"
+      },
+      "sampling_mode_seed": {
+        "name": "seed"
+      },
+      "sampling_mode_temperature": {
+        "name": "temperature"
+      },
+      "sampling_mode_top_k": {
+        "name": "top_k"
+      },
+      "sampling_mode_top_p": {
+        "name": "top_p"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "system prompt را در chat template مدل جایگزین می‌کند. وقتی template پیش‌فرض استفاده نشود، نادیده گرفته می‌شود."
+      },
+      "thinking": {
+        "name": "تفکر",
+        "tooltip": "اگر مدل پشتیبانی می‌کند، در حالت تفکر عمل کنید."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "اگر مدل دارای system prompt/template داخلی است، از آن استفاده کنید."
+      },
+      "videos": {
+        "name": "ویدئوها"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "generated_text",
+        "tooltip": null
+      },
+      "1": {
+        "name": "thinking",
         "tooltip": null
       }
     }

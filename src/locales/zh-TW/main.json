@@ -11,6 +11,86 @@
     },
     "shareTooltip": "分享工作流程"
   },
+  "addCreditsDialog": {
+    "amountError": {
+      "above_max": "單次儲值上限為 {amount}。請透過另一次儲值新增更多點數。",
+      "below_min": "最低金額為 {amount}。",
+      "whole_dollars": "僅限整數美元。"
+    },
+    "blocked": {
+      "action": "開啟結帳頁面",
+      "body": "您的瀏覽器封鎖了新分頁。請開啟結帳頁面以完成付款。",
+      "title": "結帳頁面未開啟"
+    },
+    "checkoutFailed": {
+      "body": "尚未扣款。請再試一次。",
+      "title": "無法開啟結帳頁面"
+    },
+    "close": "關閉",
+    "continue": "繼續",
+    "credits": "{credits} 點數",
+    "creditsUnavailable": "— 點數",
+    "customAmountLabel": "或輸入金額",
+    "messageSupport": "聯絡支援團隊",
+    "needsVerification": {
+      "action": "驗證付款",
+      "body": "您的銀行正在等待您確認。請驗證以完成此次儲值。",
+      "footer": "{amount}，尚未驗證",
+      "title": "您的 {amount} 付款需要驗證",
+      "titleNoAmount": "您的付款需要驗證"
+    },
+    "negativeBalance": "您的餘額為 −{credits} 點數。此次儲值會先抵銷該金額。",
+    "notAllowed": {
+      "body": "請查看「帳務」設定以瞭解原因。",
+      "title": "您目前無法新增點數"
+    },
+    "notVerified": {
+      "action": "聯絡支援團隊",
+      "body": "您的銀行未確認這筆付款。請稍後再試，或聯絡支援團隊。",
+      "footer": "未通過驗證",
+      "footerTitle": "儲值 {amount}",
+      "title": "您的 {amount} 付款未通過驗證",
+      "titleNoAmount": "您的付款未通過驗證"
+    },
+    "opened": {
+      "amount": "金額",
+      "body": "您的付款完成後，點數會立即新增至此工作區。",
+      "credits": "點數",
+      "reopen": "重新開啟結帳頁面",
+      "title": "結帳頁面已在新分頁中開啟",
+      "titleBrowser": "結帳頁面已在您的瀏覽器中開啟"
+    },
+    "opening": "正在開啟…",
+    "paidAtCheckout": "{amount}，於結帳時付款",
+    "planLine": {
+      "ended": "購買點數不會重新啟用您的 Cloud 方案。請重新訂閱以在 Cloud 上執行工作流程。",
+      "free_runs": "購買點數不會啟用 Cloud 方案。免費執行次數用完後，請訂閱以繼續執行工作流程。",
+      "no_plan": "購買點數不會啟用 Cloud 方案。請訂閱以在 Cloud 上執行工作流程。"
+    },
+    "processing": {
+      "body": "無需再次付款。",
+      "title": "一筆 {amount} 的付款仍在處理中",
+      "titleNoAmount": "一筆付款仍在處理中"
+    },
+    "purchasesPaused": {
+      "body": "請稍後再試，或{support}。",
+      "title": "目前無法購買點數"
+    },
+    "rateLimited": {
+      "body": "請於 {wait} 後再試，或{support}。",
+      "bodyNoWait": "請稍後再試，或{support}。",
+      "title": "您目前已達到儲值上限"
+    },
+    "title": "新增點數",
+    "wait": {
+      "day": "一天",
+      "days": "{count} 天",
+      "hour": "一小時",
+      "hours": "{count} 小時",
+      "minute": "一分鐘",
+      "minutes": "{count} 分鐘"
+    }
+  },
   "agent": {
     "addFromAssets": "從資產面板拖曳加入資產",
     "addNodesFromGraph": "提及圖表中的節點",
@@ -48,6 +128,7 @@
     "backToPreviousChat": "返回上一個聊天",
     "beta": "測試版",
     "canvasIsEmptyAfterTurn": "此畫布是空的，尚未加入任何內容。目前沒有可執行、儲存或匯出的內容。",
+    "canvasNotReadyForSend": "此分頁的畫布尚未準備就緒，因此未傳送您的訊息。請稍後再試。",
     "changeWorkflowForChat": "變更代理程式可編輯的工作流程",
     "chatOptions": "聊天選項",
     "chooseWorkflow": "選擇工作流程",
@@ -132,6 +213,12 @@
     "entryFailedReason": "ComfyUI 無法啟動代理程式：{reason}",
     "entryStarting": "代理程式正在啟動…",
     "entryStartingReason": "ComfyUI 正在啟動代理程式：{reason}",
+    "extensionChange": {
+      "disabled": "已停用節點套件 {pack}",
+      "enabled": "已啟用節點套件 {pack}",
+      "removed": "已移除節點套件 {pack}",
+      "restartHint": "ComfyUI 重新啟動後才會生效。重新啟動後請重新載入此頁面。"
+    },
     "feedbackCaption": "分享意見回饋",
     "focusNode": "在畫布上顯示",
     "focusNodeLabel": "在畫布上顯示 {node}",
@@ -297,6 +384,7 @@
     "targetWorkflowUnavailable": "目標工作流程已無法使用。",
     "thinking": "思考中...",
     "title": "Comfy Agent",
+    "toolFailed": "{tool} 失敗",
     "toolFailedSkill": "載入 {skill} 失敗",
     "toolForgettingPreference": "正在移除偏好設定",
     "toolForgotPreference": "已忘記偏好設定",
@@ -305,9 +393,14 @@
     "toolNotConfirmedOnCanvas": "{tool} — 尚未在您的畫布上確認",
     "toolOpenedNewTab": "已開啟新分頁",
     "toolOpeningNewTab": "正在開啟新分頁",
+    "toolOutcomeUnknown": "{tool} — 結果未知",
+    "toolRemovedNodePack": "已移除節點套件",
+    "toolRemovingNodePack": "正在移除節點套件",
     "toolSavedPreference": "已儲存偏好設定",
     "toolSavingPreference": "正在儲存偏好設定",
+    "toolSwitchedNodePack": "已切換節點套件",
     "toolSwitchedTabs": "已切換分頁",
+    "toolSwitchingNodePack": "正在切換節點套件",
     "toolSwitchingTabs": "正在切換分頁",
     "typeToSearch": "輸入以搜尋",
     "unavailableWorkflowReference": "{name}（無法使用）",
@@ -1236,13 +1329,18 @@
   "credits": {
     "accountInitialized": "帳戶已初始化",
     "activity": "活動",
+    "addCreditsRefusal": {
+      "paymentPastDue": "請更新您的付款方式以新增點數。",
+      "topupPurchasesPaused": "目前無法購買點數。請稍後再試，或聯絡支援團隊。",
+      "unavailable": "目前無法為此工作區新增點數。"
+    },
     "added": "已新增",
     "additionalInfo": "其他資訊",
     "api": "API",
     "apiPricing": "API 價格",
     "charge": "扣款",
+    "creditUnit": "點數 | 點數",
     "credits": "點數",
-    "creditUnit": "點數",
     "creditsAvailable": "可用點數",
     "details": "詳細資料",
     "eventType": "事件類型",
@@ -5934,6 +6032,7 @@
         "localBody": "您剩下 {credits} 點數。新增點數以繼續執行合作夥伴節點。| 您剩下 {credits} 點數。新增點數以繼續執行合作夥伴節點。",
         "memberBody": "此工作區剩下 {credits} 點數。請要求工作區擁有者在用完前新增點數。| 此工作區剩下 {credits} 點數。請要求工作區擁有者在用完前新增點數。",
         "ownerBody": "此工作區剩下 {credits} 點數。請在用完前新增點數。| 此工作區剩下 {credits} 點數。請在用完前新增點數。",
+        "pausedBody": "您剩下 {credits} 點數。目前無法購買點數。 | 您剩下 {credits} 點數。目前無法購買點數。",
         "personalBody": "您剩下 {credits} 點數。請在用完前新增點數。| 您剩下 {credits} 點數。請在用完前新增點數。",
         "title": "點數不足"
       },
@@ -5947,8 +6046,14 @@
         "pastDueBody": "您的團隊已用完所有點數。請更新付款方式以新增更多點數。",
         "pastDueMemberBody": "您的團隊已用完所有點數。請要求工作區擁有者更新付款方式。",
         "pastDuePersonalBody": "您已用完所有點數。請更新付款方式以新增更多點數。",
+        "pausedBody": "您的團隊已用完所有點數。目前無法購買點數。點數將於 {date} 重新補充。",
+        "pausedBodyNoDate": "您的團隊已用完所有點數。目前無法購買點數。請稍後再試，或聯絡支援團隊。",
+        "pausedPersonalBody": "您已用完所有點數。目前無法購買點數。點數將於 {date} 重新補充。",
+        "pausedPersonalBodyNoDate": "您已用完所有點數。目前無法購買點數。請稍後再試，或聯絡支援團隊。",
         "personalBody": "您已用完所有點數。請加購點數，或等到點數於 {date} 補充。",
         "personalBodyNoDate": "您已用完所有點數。請加購點數。",
+        "refusedBody": "您的團隊已用完所有點數。",
+        "refusedPersonalBody": "您已用完所有點數。",
         "title": "點數已用完"
       },
       "parked": {
@@ -5993,6 +6098,7 @@
     "billingTab": {
       "autoTopUp": {
         "actions": {
+          "addPaymentMethod": "新增付款方式",
           "manage": "管理",
           "turnOn": "開啟",
           "updatePayment": "更新付款方式"
@@ -6003,8 +6109,10 @@
         "limitTooltipNoDate": "僅計入自動儲值扣款。",
         "maximumReached": "已達每月上限。將於 {date} 重設。",
         "maximumReachedNoDate": "已達每月上限。",
-        "member": "點數不足時可自動儲值。如需管理，請聯絡工作區擁有者。",
-        "off": "當您的點數餘額不足時自動儲值",
+        "member": "點數不足時可自動儲值。請聯絡工作區擁有者以管理此設定。",
+        "noDefaultPaymentMethod": "自動儲值需要預設付款方式。請設定預設付款方式以啟用。",
+        "noPaymentMethod": "自動儲值需要付款方式。請新增付款方式以啟用。",
+        "off": "餘額偏低時自動儲值點數。",
         "onHold": "沒有預設付款方式。請設定付款方式以恢復自動儲值。",
         "paused": "已達每月上限。將於 {date} 恢復。",
         "pausedByRemainder": "下一次儲值將超過您的每月上限。將於 {date} 恢復。",
@@ -6032,13 +6140,13 @@
         "overdrawn": "您的執行次數比現有點數多用了 {count} 點。|您的執行次數比現有點數多用了 {count} 點。",
         "plan": "方案",
         "planOfPool": "{total} 中剩餘 {remaining}",
-        "planTooltip": "您的方案包含的點數。每個帳單週期會補充。",
+        "planTooltip": "方案點數會先於儲值點數使用。",
         "planUsed": "已使用 {percent}%",
-        "rateInfo": "關於點數",
-        "rateTooltip": "點數用於支付執行費用。{credits} 點 = $1。",
         "title": "點數",
+        "tooltip": "點數可用於 Comfy Cloud、ComfyUI 和 Comfy API。",
+        "tooltipLabel": "關於點數",
         "topUp": "儲值",
-        "topUpTooltip": "您加購的點數。方案點數用完後會使用這些點數。",
+        "topUpTooltip": "方案點數用盡後使用。",
         "unavailable": "無法載入您的餘額。"
       },
       "footer": {
@@ -6366,7 +6474,7 @@
     "createWorkspace": "建立新工作區",
     "failedToSwitch": "切換工作區失敗",
     "managedByOrganization": "您的組織管理您的工作區，因此您無法建立工作區。",
-    "maxWorkspacesReached": "您最多只能擁有 {max} 個工作區。請刪除一個以建立新工作區。",
+    "maxWorkspacesReached": "您最多只能擁有 {max} 個工作區。請刪除該工作區以建立新的工作區。 | 您最多只能擁有 {max} 個工作區。請刪除其中一個以建立新的工作區。",
     "personal": "個人",
     "roleMember": "成員",
     "roleOwner": "擁有者",

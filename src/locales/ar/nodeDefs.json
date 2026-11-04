@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "مقدار الاستدلال الذي يجريه النموذج قبل الإجابة. يترك 'default' الاختيار للنموذج. تختلف المستويات المدعومة حسب النموذج: يدعم GPT-6 Astra النطاق low-max، وGPT-6 Sol/Luna وGPT-5.6 النطاق none-max (دون minimal)، وGPT-5.5 النطاق none-xhigh، وGPT-5.5 Pro النطاق medium-xhigh، وGPT-5 النطاق minimal-high، وسلسلة o النطاق low-high؛ لا يحتوي GPT-4.1 على استدلال. تُرفض المستويات غير المدعومة قبل إرسال الطلب."
+        "tooltip": "تختلف المستويات المدعومة حسب النموذج. يؤدي المستوى غير المدعوم إلى إيقاف التشغيل وعرض المستويات الصالحة. يتيح 'default' للنموذج الاختيار."
       },
       "truncation": {
         "name": "الاقتصاص",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "تحويل النص إلى صورة، أو، مع الصور، تحرير image_1 مع استخدام الصور الأخرى كمراجع. تشير المطالبة إليها بوصفها <Picture 1> و<Picture 2>، ... يحتاج النموذج إلى ModelSamplingMiniMaxH3 بالقيم 1.0/1.0.",
+    "display_name": "تكييف p-h3-image",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "الارتفاع",
+        "tooltip": "تستخدم القيمة 0 ارتفاع image_1 بعد التحجيم، أو 2912 دون صور."
+      },
+      "images": {
+        "name": "الصور"
+      },
+      "prompt": {
+        "name": "المطالبة",
+        "tooltip": "مع الصور، تُسبق التعليمة القصيرة بـ \"Edit <Picture 1>. \"; أما التعليمة التي تبدأ بـ \"Edit <Picture\" وموجز التحرير من مُحسِّن المطالبة فيُستخدمان كما هما."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "‏VAE الخاص بـ p-h3-image، وهو مطلوب عند توصيل الصور."
+      },
+      "width": {
+        "name": "العرض",
+        "tooltip": "تستخدم القيمة 0 عرض image_1 بعد التحجيم، أو 2912 دون صور."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "إيجابي",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "أنشئ أغنية بغناء صوتي من مطالبة نصية باستخدام Sonilo Music 1.5.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "التحكم بعد التوليد"
+      },
+      "duration": {
+        "name": "المدة",
+        "tooltip": "تجعل 'auto' طول الأغنية ملائمًا للكلمات. يقتطع الطول المخصص الكلمات التي لا تتسع ويكرر الكلمات القصيرة."
+      },
+      "prompt": {
+        "name": "المطالبة",
+        "tooltip": "صِف الأغنية: النوع والمزاج والآلات والغناء. لتحديد الكلمات، أضف كتلة 'Lyrics:' بعلامات [Verse] / [Chorus]؛ ومن دونها، يكتب النموذج كلماته الخاصة. الحد الأقصى: 2000 حرف."
+      },
+      "seed": {
+        "name": "البذرة",
+        "tooltip": "تتحكم البذرة في ما إذا كان ينبغي للعقدة إعادة التشغيل؛ وتكون النتائج غير حتمية بغض النظر عن البذرة."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "إنشاء موسيقى من وصف نصي باستخدام نموذج الذكاء الاصطناعي الخاص بـ Sonilo. اترك المدة ۰ ليقوم النموذج بتحديدها تلقائياً من الوصف.",
     "display_name": "تحويل النص إلى موسيقى بواسطة Sonilo",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "توليد نص",
+    "display_name": "توليد نص (مهمل)",
     "inputs": {
       "audio": {
         "name": "صوت"
@@ -26560,6 +26623,79 @@
     "outputs": {
       "0": {
         "name": "النص المُولّد",
+        "tooltip": null
+      },
+      "1": {
+        "name": "التفكير",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "توليد نص",
+    "inputs": {
+      "audios": {
+        "name": "الملفات الصوتية"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "الصور"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "فك ترميز تخميني باستخدام رأس التنبؤ متعدد الرموز الخاص بنقطة التحقق. لا تأثير من دون أوزان MTP. يتكيف auto مع عمق واتساع المسودة وفقًا لمطابقات الرموز المرصودة وتكلفة التنفيذ؛ تثبت 2-5 عمقًا ثابتًا للمسودة؛ وتثبت أوضاع الشجرة كلاً من الاتساع والعمق. يظل الإخراج المُعيَّن موزعًا بصورة صحيحة، لكنه يختلف عن إخراج غير MTP للبذرة نفسها."
+      },
+      "prompt": {
+        "name": "المطالبة"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "الحد الأدنى لـ P"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "عقوبة الحضور"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "عقوبة التكرار"
+      },
+      "sampling_mode_seed": {
+        "name": "البذرة"
+      },
+      "sampling_mode_temperature": {
+        "name": "درجة الحرارة"
+      },
+      "sampling_mode_top_k": {
+        "name": "أعلى K"
+      },
+      "sampling_mode_top_p": {
+        "name": "أعلى P"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "يستبدل مطالبة النظام في قالب الدردشة الخاص بالنموذج. يُتجاهل عند عدم استخدام القالب الافتراضي."
+      },
+      "thinking": {
+        "name": "التفكير",
+        "tooltip": "اعمل في وضع التفكير إذا كان النموذج يدعمه."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "استخدم مطالبة/قالب النظام المضمَّن إذا كان النموذج يتضمن واحدًا."
+      },
+      "videos": {
+        "name": "مقاطع الفيديو"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "النص المُولَّد",
         "tooltip": null
       },
       "1": {

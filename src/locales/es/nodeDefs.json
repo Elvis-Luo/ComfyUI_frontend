@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "Cuánto razona el modelo antes de responder. 'default' deja la elección al modelo. Los niveles compatibles varían según el modelo: GPT-6 Astra low-max, GPT-6 Sol/Luna y GPT-5.6 none-max (sin minimal), GPT-5.5 none-xhigh, GPT-5.5 Pro medium-xhigh, GPT-5 minimal-high, serie o low-high; GPT-4.1 no tiene razonamiento. Los niveles no compatibles se rechazan antes de enviar la solicitud."
+        "tooltip": "Los niveles compatibles varían según el modelo. Un nivel no compatible detiene la ejecución y enumera los válidos. 'default' permite que el modelo elija."
       },
       "truncation": {
         "name": "truncamiento",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "De texto a imagen o, con imágenes, una edición de image_1 usando las demás como referencias. El prompt se refiere a ellas como <Picture 1>, <Picture 2>, ... El modelo necesita ModelSamplingMiniMaxH3 en 1.0/1.0.",
+    "display_name": "Acondicionamiento de p-h3-image",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "alto",
+        "tooltip": "0 usa el alto de image_1 después de escalarlo, o 2912 sin imágenes."
+      },
+      "images": {
+        "name": "imágenes"
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "Con imágenes, a una instrucción corta se le antepone \"Edit <Picture 1>. \"; una instrucción que comienza por \"Edit <Picture\" y un resumen de edición del ampliador de prompts se usan tal cual."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "El VAE p-h3-image, necesario cuando hay imágenes conectadas."
+      },
+      "width": {
+        "name": "ancho",
+        "tooltip": "0 usa el ancho de image_1 después de escalarlo, o 2912 sin imágenes."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "positivo",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "Genera una canción con voces cantadas a partir de un prompt de texto usando Sonilo Music 1.5.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "control después de generar"
+      },
+      "duration": {
+        "name": "duración",
+        "tooltip": "'auto' ajusta la duración de la canción a la letra. Una duración personalizada recorta las letras que no caben y repite las cortas."
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "Describe la canción: género, ambiente, instrumentos y voces. Para establecer la letra, añade un bloque 'Lyrics:' con etiquetas [Verse] / [Chorus]; sin uno, el modelo escribe su propia letra. Máximo: 2000 caracteres."
+      },
+      "seed": {
+        "name": "semilla",
+        "tooltip": "La semilla controla si el nodo debe volver a ejecutarse; los resultados no son deterministas independientemente de la semilla."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "Genera música a partir de un texto usando el modelo de IA de Sonilo. Deja la duración en 0 para que el modelo la infiera del texto.",
     "display_name": "Sonilo Texto a Música",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "Generar texto",
+    "display_name": "Generar texto (EN DESUSO)",
     "inputs": {
       "audio": {
         "name": "audio"
@@ -26564,6 +26627,79 @@
       },
       "1": {
         "name": "razonamiento",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "Generar texto",
+    "inputs": {
+      "audios": {
+        "name": "audios"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "imágenes"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "Decodificación especulativa con la cabeza de predicción de múltiples tokens del checkpoint. No tiene efecto sin pesos MTP. auto adapta la profundidad y la amplitud del borrador a las coincidencias de tokens observadas y al coste de ejecución; 2-5 fija una profundidad de borrador constante; los modos de árbol fijan tanto la amplitud como la profundidad. La salida muestreada mantiene la distribución correcta, pero difiere de la salida sin MTP con la misma semilla."
+      },
+      "prompt": {
+        "name": "prompt"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "min_p"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "penalización de presencia"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "penalización por repetición"
+      },
+      "sampling_mode_seed": {
+        "name": "semilla"
+      },
+      "sampling_mode_temperature": {
+        "name": "temperatura"
+      },
+      "sampling_mode_top_k": {
+        "name": "top_k"
+      },
+      "sampling_mode_top_p": {
+        "name": "top_p"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "Reemplaza la instrucción del sistema en la plantilla de chat del modelo. Se ignora cuando no se utiliza la plantilla predeterminada."
+      },
+      "thinking": {
+        "name": "razonamiento",
+        "tooltip": "Opera en modo de razonamiento si el modelo lo admite."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "Usa la instrucción o plantilla de sistema integrada si el modelo dispone de una."
+      },
+      "videos": {
+        "name": "vídeos"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "texto generado",
+        "tooltip": null
+      },
+      "1": {
+        "name": "pensamiento",
         "tooltip": null
       }
     }

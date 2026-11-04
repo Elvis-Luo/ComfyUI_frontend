@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "模型在回答前进行多少推理。'default' 将选择权交给模型。各模型支持的级别不同：GPT-6 Astra 为 low-max，GPT-6 Sol/Luna 和 GPT-5.6 为 none-max（不含 minimal），GPT-5.5 为 none-xhigh，GPT-5.5 Pro 为 medium-xhigh，GPT-5 为 minimal-high，o 系列为 low-high；GPT-4.1 不支持推理。请求发送前会拒绝不受支持的级别。"
+        "tooltip": "支持的级别因模型而异。不受支持的级别会停止运行并列出有效级别。'default' 让模型自行选择。"
       },
       "truncation": {
         "name": "截断",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "文本生成图像；或者在提供图像时，以 image_1 为基础、其他图像作为参考进行图像编辑。提示词中将它们称为 <Picture 1>、<Picture 2>、……。该模型需要将 ModelSamplingMiniMaxH3 设为 1.0/1.0。",
+    "display_name": "p-h3-image 条件化",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "height",
+        "tooltip": "0 将使用缩放后 image_1 的高度；未提供图像时则使用 2912。"
+      },
+      "images": {
+        "name": "images"
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "使用图像时，简短指令前会加上“Edit <Picture 1>. ”；以“Edit <Picture”开头的指令以及来自提示词放大器的编辑概要将按原样使用。"
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "p-h3-image VAE，在连接图像时需要使用。"
+      },
+      "width": {
+        "name": "width",
+        "tooltip": "0 将使用缩放后 image_1 的宽度；未提供图像时则使用 2912。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "正面",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "使用 Sonilo Music 1.5 根据文本提示词生成带演唱人声的歌曲。",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "生成后控制"
+      },
+      "duration": {
+        "name": "duration",
+        "tooltip": "“auto”会使歌曲长度适应歌词。自定义长度会截断无法容纳的歌词，并重复较短的歌词。"
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "描述歌曲：流派、氛围、乐器和人声。要设置歌词，请添加带有 [Verse] / [Chorus] 标签的“Lyrics:”块；若不添加，模型将自行创作歌词。最大值：2000 个字符。"
+      },
+      "seed": {
+        "name": "seed",
+        "tooltip": "种子控制节点是否应重新运行；无论种子为何，结果都是非确定性的。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "使用 Sonilo 的AI模型根据文本提示生成音乐。将时长设置为0可让模型根据提示自动推断时长。",
     "display_name": "Sonilo 文本生成音乐",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "TextGenerate",
+    "display_name": "生成文本（已弃用）",
     "inputs": {
       "audio": {
         "name": "音频"
@@ -26560,6 +26623,79 @@
     "outputs": {
       "0": {
         "name": "生成文本",
+        "tooltip": null
+      },
+      "1": {
+        "name": "思考",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "生成文本",
+    "inputs": {
+      "audios": {
+        "name": "audios"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "images"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "使用检查点的多词元预测头进行推测解码。没有 MTP 权重时无效。auto 会根据观测到的词元匹配情况和执行成本，自适应调整草稿深度与广度；2-5 会固定草稿深度；树模式会同时固定广度和深度。采样输出仍保持正确的分布，但对于相同种子，其结果会与非 MTP 输出不同。"
+      },
+      "prompt": {
+        "name": "prompt"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "最小概率"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "存在惩罚"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "重复惩罚"
+      },
+      "sampling_mode_seed": {
+        "name": "种子"
+      },
+      "sampling_mode_temperature": {
+        "name": "温度"
+      },
+      "sampling_mode_top_k": {
+        "name": "前 K 项"
+      },
+      "sampling_mode_top_p": {
+        "name": "前 P 概率"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "替换模型聊天模板中的系统提示词。未使用默认模板时将被忽略。"
+      },
+      "thinking": {
+        "name": "thinking",
+        "tooltip": "如果模型支持，则以思考模式运行。"
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "如果模型提供内置系统提示词/模板，则使用它。"
+      },
+      "videos": {
+        "name": "videos"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "生成的文本",
         "tooltip": null
       },
       "1": {

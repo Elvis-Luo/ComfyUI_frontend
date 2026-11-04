@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "モデルが回答前にどの程度推論するかを指定します。'default' はモデルに選択を委ねます。対応レベルはモデルごとに異なります: GPT-6 Astra は low-max、GPT-6 Sol/Luna および GPT-5.6 は none-max（minimal なし）、GPT-5.5 は none-xhigh、GPT-5.5 Pro は medium-xhigh、GPT-5 は minimal-high、o-series は low-high、GPT-4.1 には推論機能がありません。非対応のレベルはリクエスト送信前に拒否されます。"
+        "tooltip": "サポートされるレベルはモデルによって異なります。サポートされていないレベルを指定すると実行が停止し、有効なレベルが表示されます。'default' を指定すると、モデルが選択します。"
       },
       "truncation": {
         "name": "切り捨て",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "テキストから画像を生成します。画像を使用する場合は、image_1 を編集し、他の画像を参照として使用します。プロンプト内ではそれらを <Picture 1>、<Picture 2>、…として参照します。モデルには 1.0/1.0 の ModelSamplingMiniMaxH3 が必要です。",
+    "display_name": "p-h3-image コンディショニング",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "高さ",
+        "tooltip": "0 を指定すると、スケーリング後の image_1 の高さが使用されます。画像がない場合は 2912 になります。"
+      },
+      "images": {
+        "name": "画像"
+      },
+      "prompt": {
+        "name": "プロンプト",
+        "tooltip": "画像がある場合、短い指示の先頭には \"Edit <Picture 1>. \" が付加されます。\"Edit <Picture\" で始まる指示およびプロンプトアップサンプラーからの編集指示は、そのまま使用されます。"
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "画像が接続されている場合に必要な p-h3-image VAE。"
+      },
+      "width": {
+        "name": "幅",
+        "tooltip": "0 を指定すると、スケーリング後の image_1 の幅が使用されます。画像がない場合は 2912 になります。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "ポジティブ",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "Sonilo Music 1.5 を使用して、テキストプロンプトから歌唱ボーカル付きの楽曲を生成します。",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "生成後の制御"
+      },
+      "duration": {
+        "name": "長さ",
+        "tooltip": "'auto' は楽曲の長さを歌詞に合わせます。カスタムの長さでは、収まらない歌詞は切り詰められ、短い歌詞は繰り返されます。"
+      },
+      "prompt": {
+        "name": "プロンプト",
+        "tooltip": "楽曲を説明します：ジャンル、ムード、楽器、ボーカル。歌詞を設定するには、[Verse] / [Chorus] タグを含む 'Lyrics:' ブロックを追加します。追加しない場合、モデルが独自の歌詞を作成します。最大：2000 文字。"
+      },
+      "seed": {
+        "name": "シード",
+        "tooltip": "シードはノードを再実行するかどうかを制御します。結果はシードにかかわらず非決定的です。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "SoniloのAIモデルを使ってテキストプロンプトから音楽を生成します。継続時間を0にすると、プロンプトから自動的に推定されます。",
     "display_name": "Sonilo テキストから音楽生成",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "TextGenerate",
+    "display_name": "テキストを生成（非推奨）",
     "inputs": {
       "audio": {
         "name": "オーディオ"
@@ -26555,6 +26618,79 @@
       "video": {
         "name": "ビデオ",
         "tooltip": "ビデオフレームを画像バッチとして扱います。24 FPSと仮定し、内部的に1 FPSにサブサンプリングされます。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "生成テキスト",
+        "tooltip": null
+      },
+      "1": {
+        "name": "思考",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "テキストを生成",
+    "inputs": {
+      "audios": {
+        "name": "音声"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "画像"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "チェックポイントのマルチトークン予測ヘッドを使用した投機的デコーディングです。MTP 重みがなければ効果はありません。auto は、観測されたトークン一致と実行コストに応じてドラフトの深さと幅を調整します。2～5 は一定のドラフト深さに固定します。tree モードは幅と深さの両方を固定します。サンプリングされた出力は正しい分布を維持しますが、同じシードでも非 MTP 出力とは異なります。"
+      },
+      "prompt": {
+        "name": "プロンプト"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "最小 p"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "存在ペナルティ"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "反復ペナルティ"
+      },
+      "sampling_mode_seed": {
+        "name": "シード"
+      },
+      "sampling_mode_temperature": {
+        "name": "温度"
+      },
+      "sampling_mode_top_k": {
+        "name": "上位 k"
+      },
+      "sampling_mode_top_p": {
+        "name": "上位 p"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "モデルのチャットテンプレート内のシステムプロンプトを置き換えます。デフォルトテンプレートを使用しない場合は無視されます。"
+      },
+      "thinking": {
+        "name": "思考",
+        "tooltip": "モデルが対応している場合、思考モードで動作します。"
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "モデルに組み込みのシステムプロンプト／テンプレートがある場合、それを使用します。"
+      },
+      "videos": {
+        "name": "動画"
       }
     },
     "outputs": {

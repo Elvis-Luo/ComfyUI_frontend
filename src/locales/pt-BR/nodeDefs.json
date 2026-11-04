@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "Quanto o modelo raciocina antes de responder. 'default' deixa a escolha para o modelo. Os níveis compatíveis variam por modelo: GPT-6 Astra low-max, GPT-6 Sol/Luna e GPT-5.6 none-max (sem minimal), GPT-5.5 none-xhigh, GPT-5.5 Pro medium-xhigh, GPT-5 minimal-high, série o low-high; GPT-4.1 não tem raciocínio. Níveis não compatíveis são rejeitados antes de a solicitação ser enviada."
+        "tooltip": "Os níveis compatíveis variam conforme o modelo. Um nível não compatível interrompe a execução e lista os níveis válidos. 'default' deixa o modelo escolher."
       },
       "truncation": {
         "name": "truncation",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "Texto para imagem ou, com imagens, uma edição de image_1 usando as demais como referências. O prompt se refere a elas como <Picture 1>, <Picture 2>, ... O modelo precisa de ModelSamplingMiniMaxH3 em 1.0/1.0.",
+    "display_name": "Condicionamento p-h3-image",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "altura",
+        "tooltip": "0 usa a altura de image_1 após o redimensionamento, ou 2912 sem imagens."
+      },
+      "images": {
+        "name": "imagens"
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "Com imagens, uma instrução curta recebe \"Edit <Picture 1>. \" no início; uma instrução que começa com \"Edit <Picture\" e uma instrução de edição do ampliador de prompt são usadas como estão."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "O VAE p-h3-image, necessário quando imagens estão conectadas."
+      },
+      "width": {
+        "name": "largura",
+        "tooltip": "0 usa a largura de image_1 após o redimensionamento, ou 2912 sem imagens."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "positivo",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "Gere uma música com vocais cantados a partir de um prompt de texto usando Sonilo Music 1.5.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "controle após gerar"
+      },
+      "duration": {
+        "name": "duração",
+        "tooltip": "'auto' ajusta a duração da música à letra. Uma duração personalizada corta as letras que não couberem e repete as curtas."
+      },
+      "prompt": {
+        "name": "prompt",
+        "tooltip": "Descreva a música: gênero, clima, instrumentos e vocais. Para definir a letra, adicione um bloco 'Lyrics:' com tags [Verse] / [Chorus]; sem um, o modelo escreve sua própria letra. Máximo: 2000 caracteres."
+      },
+      "seed": {
+        "name": "seed",
+        "tooltip": "A seed controla se o nó deve ser executado novamente; os resultados não são determinísticos, independentemente da seed."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "Gere música a partir de um prompt de texto usando o modelo de IA do Sonilo. Deixe a duração em 0 para que o modelo infira a duração a partir do prompt.",
     "display_name": "Sonilo Texto para Música",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "TextGenerate",
+    "display_name": "Gerar texto (OBSOLETO)",
     "inputs": {
       "audio": {
         "name": "áudio"
@@ -26560,6 +26623,79 @@
     "outputs": {
       "0": {
         "name": "texto_gerado",
+        "tooltip": null
+      },
+      "1": {
+        "name": "raciocínio",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "Gerar texto",
+    "inputs": {
+      "audios": {
+        "name": "áudios"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "imagens"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "Decodificação especulativa com a cabeça de previsão de múltiplos tokens do checkpoint. Não tem efeito sem pesos de MTP. auto adapta a profundidade e a largura do rascunho às correspondências de tokens observadas e ao custo de execução; 2-5 fixa uma profundidade de rascunho constante; os modos de árvore fixam tanto a largura quanto a profundidade. A saída amostrada mantém a distribuição correta, mas difere da saída sem MTP para a mesma seed."
+      },
+      "prompt": {
+        "name": "prompt"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "p mínimo"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "penalidade de presença"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "penalidade de repetição"
+      },
+      "sampling_mode_seed": {
+        "name": "semente"
+      },
+      "sampling_mode_temperature": {
+        "name": "temperatura"
+      },
+      "sampling_mode_top_k": {
+        "name": "top k"
+      },
+      "sampling_mode_top_p": {
+        "name": "top p"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "Substitui o prompt de sistema no modelo de conversa do modelo. Ignorado quando o modelo padrão não é usado."
+      },
+      "thinking": {
+        "name": "raciocínio",
+        "tooltip": "Opere no modo de raciocínio se o modelo oferecer suporte a ele."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "Use o prompt/modelo de sistema integrado se o modelo tiver um."
+      },
+      "videos": {
+        "name": "vídeos"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "texto gerado",
         "tooltip": null
       },
       "1": {

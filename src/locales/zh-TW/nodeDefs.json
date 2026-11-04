@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "模型在回答前進行多少推理。'default' 會將選擇權交給模型。支援的等級依模型而異：GPT-6 Astra 為 low-max，GPT-6 Sol/Luna 和 GPT-5.6 為 none-max（不含 minimal），GPT-5.5 為 none-xhigh，GPT-5.5 Pro 為 medium-xhigh，GPT-5 為 minimal-high，o-series 為 low-high；GPT-4.1 沒有推理功能。不支援的等級會在傳送請求前遭到拒絕。"
+        "tooltip": "支援的等級因模型而異。不支援的等級會停止執行並列出有效等級。'default' 讓模型自行選擇。"
       },
       "truncation": {
         "name": "truncation",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "可由文字生成影像；使用影像時，會編輯 image_1，並將其他影像作為參考。提示詞會將它們稱為 <Picture 1>、<Picture 2>、……。模型需要將 ModelSamplingMiniMaxH3 設為 1.0/1.0。",
+    "display_name": "p-h3-image 條件設定",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "高度",
+        "tooltip": "0 會使用縮放後 image_1 的高度；未使用影像時則為 2912。"
+      },
+      "images": {
+        "name": "影像"
+      },
+      "prompt": {
+        "name": "提示詞",
+        "tooltip": "使用影像時，簡短指令前會加上 \"Edit <Picture 1>. \"；以 \"Edit <Picture\" 開頭的指令，以及提示詞放大器提供的編輯簡述，會保持原樣使用。"
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "p-h3-image VAE；連接影像時需要使用。"
+      },
+      "width": {
+        "name": "寬度",
+        "tooltip": "0 會使用縮放後 image_1 的寬度；未使用影像時則為 2912。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "正面條件",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "使用 Sonilo Music 1.5，根據文字提示詞產生包含演唱人聲的歌曲。",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "生成後控制"
+      },
+      "duration": {
+        "name": "時長",
+        "tooltip": "'auto' 會依歌詞調整歌曲長度。自訂長度會截斷無法容納的歌詞，並重複較短的歌詞。"
+      },
+      "prompt": {
+        "name": "提示詞",
+        "tooltip": "描述歌曲：曲風、氛圍、樂器與人聲。若要指定歌詞，請加入含有 [Verse] / [Chorus] 標籤的 'Lyrics:' 區塊；若未加入，模型會自行撰寫歌詞。上限：2000 個字元。"
+      },
+      "seed": {
+        "name": "種子",
+        "tooltip": "種子控制節點是否應重新執行；無論種子為何，結果皆不具確定性。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "使用 Sonilo 的 AI 模型，根據文字提示產生音樂。將時長設為 0 可讓模型自動從提示中推斷時長。",
     "display_name": "Sonilo 文字轉音樂",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "TextGenerate",
+    "display_name": "產生文字（已淘汰）",
     "inputs": {
       "audio": {
         "name": "音訊"
@@ -26555,6 +26618,79 @@
       "video": {
         "name": "影片",
         "tooltip": "影片幀作為圖像批次。預設為 24 FPS；內部會降採樣為 1 FPS。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "生成文字",
+        "tooltip": null
+      },
+      "1": {
+        "name": "思考",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "產生文字",
+    "inputs": {
+      "audios": {
+        "name": "音訊"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "影像"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "使用檢查點的多詞元預測頭進行推測式解碼。若無 MTP 權重則無效果。auto 會根據觀察到的詞元匹配情況與執行成本，調整草稿的深度與廣度；2-5 會固定草稿深度；樹狀模式會同時固定廣度與深度。取樣輸出仍維持正確的分布，但相同種子下會與非 MTP 輸出不同。"
+      },
+      "prompt": {
+        "name": "提示詞"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "最小 P"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "存在懲罰"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "重複懲罰"
+      },
+      "sampling_mode_seed": {
+        "name": "種子"
+      },
+      "sampling_mode_temperature": {
+        "name": "溫度"
+      },
+      "sampling_mode_top_k": {
+        "name": "前 K"
+      },
+      "sampling_mode_top_p": {
+        "name": "前 P"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "取代模型聊天範本中的系統提示詞。未使用預設範本時會忽略此設定。"
+      },
+      "thinking": {
+        "name": "思考",
+        "tooltip": "若模型支援，則以思考模式運作。"
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "若模型提供範本，則使用其內建的系統提示詞／範本。"
+      },
+      "videos": {
+        "name": "影片"
       }
     },
     "outputs": {

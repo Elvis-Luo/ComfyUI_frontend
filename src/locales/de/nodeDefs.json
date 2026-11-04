@@ -18750,7 +18750,7 @@
       },
       "reasoning_effort": {
         "name": "reasoning_effort",
-        "tooltip": "Wie stark das Modell vor der Antwort schlussfolgert. 'default' überlässt die Wahl dem Modell. Unterstützte Stufen unterscheiden sich je nach Modell: GPT-6 Astra low-max, GPT-6 Sol/Luna und GPT-5.6 none-max (kein minimal), GPT-5.5 none-xhigh, GPT-5.5 Pro medium-xhigh, GPT-5 minimal-high, o-series low-high; GPT-4.1 verfügt über kein Reasoning. Nicht unterstützte Stufen werden abgelehnt, bevor die Anfrage gesendet wird."
+        "tooltip": "Unterstützte Stufen variieren je nach Modell. Eine nicht unterstützte Stufe beendet den Durchlauf und listet die gültigen auf. Mit „default“ wählt das Modell."
       },
       "truncation": {
         "name": "truncation",
@@ -19010,6 +19010,43 @@
     },
     "outputs": {
       "0": {
+        "tooltip": null
+      }
+    }
+  },
+  "PH3ImageConditioning": {
+    "description": "Text-zu-Bild oder, mit Bildern, eine Bearbeitung von image_1 mit den anderen als Referenzen. Der Prompt bezeichnet sie als <Picture 1>, <Picture 2>, ... Das Modell benötigt ModelSamplingMiniMaxH3 auf 1.0/1.0.",
+    "display_name": "p-h3-image-Konditionierung",
+    "inputs": {
+      "clip": {
+        "name": "clip"
+      },
+      "height": {
+        "name": "Höhe",
+        "tooltip": "0 verwendet die Höhe von image_1 nach der Skalierung bzw. 2912 ohne Bilder."
+      },
+      "images": {
+        "name": "Bilder"
+      },
+      "prompt": {
+        "name": "Prompt",
+        "tooltip": "Bei Bildern wird einer kurzen Anweisung „Edit <Picture 1>. “ vorangestellt; eine Anweisung, die mit „Edit <Picture“ beginnt, sowie eine Bearbeitungsanweisung aus dem Prompt-Upsampler werden unverändert verwendet."
+      },
+      "vae": {
+        "name": "vae",
+        "tooltip": "Das p-h3-image VAE, das benötigt wird, wenn Bilder verbunden sind."
+      },
+      "width": {
+        "name": "Breite",
+        "tooltip": "0 verwendet die Breite von image_1 nach der Skalierung bzw. 2912 ohne Bilder."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "positiv",
+        "tooltip": null
+      },
+      "1": {
         "tooltip": null
       }
     }
@@ -24973,6 +25010,32 @@
       }
     }
   },
+  "SoniloMusic15": {
+    "description": "Generieren Sie mit Sonilo Music 1.5 anhand eines Text-Prompts einen Song mit gesungenem Gesang.",
+    "display_name": "Sonilo Music 1.5",
+    "inputs": {
+      "control_after_generate": {
+        "name": "Steuerung nach Generierung"
+      },
+      "duration": {
+        "name": "Dauer",
+        "tooltip": "„auto“ passt die Songlänge an den Liedtext an. Bei einer benutzerdefinierten Länge wird nicht passender Liedtext abgeschnitten und kurzer wiederholt."
+      },
+      "prompt": {
+        "name": "Prompt",
+        "tooltip": "Beschreiben Sie den Song: Genre, Stimmung, Instrumente und Gesang. Um den Text festzulegen, fügen Sie einen „Lyrics:“-Block mit [Verse]- / [Chorus]-Tags hinzu; ohne diesen schreibt das Modell seinen eigenen Liedtext. Maximum: 2000 Zeichen."
+      },
+      "seed": {
+        "name": "Seed",
+        "tooltip": "Der Seed steuert, ob der Node erneut ausgeführt werden soll; die Ergebnisse sind unabhängig vom Seed nicht deterministisch."
+      }
+    },
+    "outputs": {
+      "0": {
+        "tooltip": null
+      }
+    }
+  },
   "SoniloTextToMusic": {
     "description": "Musik aus einem Text-Prompt mit dem KI-Modell von Sonilo generieren.",
     "display_name": "Sonilo Text zu Musik",
@@ -26421,7 +26484,7 @@
     }
   },
   "TextGenerate": {
-    "display_name": "Text generieren",
+    "display_name": "Text generieren (VERALTET)",
     "inputs": {
       "audio": {
         "name": "Audio"
@@ -26564,6 +26627,79 @@
       },
       "1": {
         "name": "Denken",
+        "tooltip": null
+      }
+    }
+  },
+  "TextGenerateV2": {
+    "display_name": "Text generieren",
+    "inputs": {
+      "audios": {
+        "name": "Audios"
+      },
+      "clip": {
+        "name": "clip"
+      },
+      "images": {
+        "name": "Bilder"
+      },
+      "max_length": {
+        "name": "max_length"
+      },
+      "mtp": {
+        "name": "mtp",
+        "tooltip": "Spekulatives Decoding mit dem Multi-Token-Prediction-Head des Checkpoints. Ohne MTP-Gewichte keine Wirkung. auto passt die Tiefe und Breite des Entwurfs an beobachtete Token-Übereinstimmungen und Ausführungskosten an; 2-5 legt eine konstante Entwurfstiefe fest; Baum-Modi legen sowohl Breite als auch Tiefe fest. Die gesampelte Ausgabe bleibt korrekt verteilt, unterscheidet sich jedoch bei gleichem Seed von der Ausgabe ohne MTP."
+      },
+      "prompt": {
+        "name": "Prompt"
+      },
+      "sampling_mode": {
+        "name": "sampling_mode"
+      },
+      "sampling_mode_min_p": {
+        "name": "Min. P"
+      },
+      "sampling_mode_presence_penalty": {
+        "name": "Präsenz-Penalty"
+      },
+      "sampling_mode_repetition_penalty": {
+        "name": "Wiederholungs-Penalty"
+      },
+      "sampling_mode_seed": {
+        "name": "Seed"
+      },
+      "sampling_mode_temperature": {
+        "name": "Temperatur"
+      },
+      "sampling_mode_top_k": {
+        "name": "Top K"
+      },
+      "sampling_mode_top_p": {
+        "name": "Top P"
+      },
+      "system_prompt": {
+        "name": "system_prompt",
+        "tooltip": "Ersetzt den System-Prompt in der Chat-Vorlage des Modells. Wird ignoriert, wenn die Standardvorlage nicht verwendet wird."
+      },
+      "thinking": {
+        "name": "Denken",
+        "tooltip": "Im Denkmodus arbeiten, wenn das Modell ihn unterstützt."
+      },
+      "use_default_template": {
+        "name": "use_default_template",
+        "tooltip": "Verwenden Sie den integrierten System-Prompt bzw. die integrierte Vorlage, falls das Modell einen bzw. eine hat."
+      },
+      "videos": {
+        "name": "Videos"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Generierter Text",
+        "tooltip": null
+      },
+      "1": {
+        "name": "Überlegungen",
         "tooltip": null
       }
     }
