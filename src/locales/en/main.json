@@ -1541,7 +1541,8 @@
       "delete": "Delete",
       "removeJob": "Remove job",
       "copyErrorMessage": "Copy error message",
-      "reportError": "Report error"
+      "reportError": "Report error",
+      "noWorkflowData": "This job has no workflow that can be opened"
     },
     "toggleJobHistory": "Toggle Job History",
     "jobHistory": "Job History",
